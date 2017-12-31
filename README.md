@@ -1,2 +1,1 @@
-# muk_docs
-Documentation
+# MuK Documentation
