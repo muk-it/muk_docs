@@ -878,6 +878,74 @@ $.ajax({
 ]
 ```
 
+**Report**
+----
+
+Generate reports.
+
+* **URL**
+
+  _/api/report_
+
+* **Method:**
+  
+  `GET`
+  
+* **Data Params**
+
+  **Required:**
+ 
+   `token=[alphanumeric]`
+   
+   `report=[alphanumeric]`
+   
+   `ids=[json]`
+   
+  **Optional:**
+ 
+   `type=[html|pdf]`
+   
+   `context=[json]`
+   
+   `args=[json]`
+   
+   `kwargs=[json]`
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `file`
+ 
+* **Error Response:**
+
+  * **Code:** 403 FORBIDDEN <br />
+    **Content:** `"error": "token_invalid"`
+    
+  * **Code:** 400 BAD REQUEST  <br />
+    **Content:** `{'error': "arguments_missing ..."}`
+
+* **Sample Call:**
+
+```javascript
+$.ajax({
+  type: "GET",
+  url: "/api/report",
+  data: {
+    token: "...",
+    report: "sale.action_report_saleorder",
+    model: "sale.order",
+    ids: "[1]",
+  },
+  success: success,
+});
+```
+
+* **Sample Response:**
+
+```
+File Response
+```
+
 ## Notes and Credits
 
 The app icon is based on an icon made by [Prosymbols](https://www.flaticon.com/packs/web-design-and-development-12) from [www.flaticon.com](www.flaticon.com)
