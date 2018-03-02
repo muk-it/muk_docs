@@ -17,7 +17,7 @@ Retrieves the system version information.
 
 * **URL**
 
-  _/api
+  _/api_
 
 * **Method:**
   
@@ -54,6 +54,58 @@ $.ajax({
      ""
   ]
 }
+```
+
+**Change Master Password**
+----
+
+Refreshes the token lifetime.
+
+* **URL**
+
+  _/api/change_master_password_
+
+* **Method:**
+  
+  `POST`
+  
+* **Data Params**
+
+  **Required:**
+ 
+   `password_new=[alphanumeric]`
+   
+  **Optional:**
+ 
+   `password_old=[alphanumeric]`
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `True`
+ 
+* **Error Response:**
+    
+  * **Code:** 400 BAD REQUEST  <br />
+    **Content:** `{'error': "arguments_missing ..."}`
+
+* **Sample Call:**
+
+```javascript
+$.ajax({
+  type: "GET",
+  url: "/api/change_master_password_",
+  data: {
+    password_new: "pw",
+  },
+  success: success,
+});
+```
+
+* **Sample Response:**
+
+```
+True
 ```
 
 **Authentication**
