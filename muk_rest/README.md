@@ -107,6 +107,51 @@ $.ajax({
 True
 ```
 
+**Database List**
+----
+
+List the available databases.
+
+* **URL**
+
+  _/api/database/list_
+
+* **Method:**
+  
+  `GET`
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `{...}`
+ 
+* **Error Response:**
+    
+  * **Code:** 400 BAD REQUEST
+
+* **Sample Call:**
+
+```javascript
+$.ajax({
+  type: "GET",
+  url: "/api/database/list",
+  success: success,
+});
+```
+
+* **Sample Response:**
+
+```
+{
+  "databases": [
+      "rest"
+  ],
+  "incompatible_databases": [
+  ]
+}
+```
+
+
 **Authentication**
 ----
 
