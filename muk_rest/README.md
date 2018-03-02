@@ -86,8 +86,7 @@ Refreshes the token lifetime.
  
 * **Error Response:**
     
-  * **Code:** 400 BAD REQUEST  <br />
-    **Content:** `{'error': "arguments_missing ..."}`
+  * **Code:** 400 BAD REQUEST
 
 * **Sample Call:**
 
