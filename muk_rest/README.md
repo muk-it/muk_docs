@@ -59,7 +59,7 @@ $.ajax({
 **Change Master Password**
 ----
 
-Refreshes the token lifetime.
+Changes the master password.
 
 * **URL**
 
@@ -93,7 +93,7 @@ Refreshes the token lifetime.
 ```javascript
 $.ajax({
   type: "GET",
-  url: "/api/change_master_password_",
+  url: "/api/change_master_password",
   data: {
     password_new: "pw",
   },
