@@ -268,6 +268,169 @@ $.ajax({
 True
 ```
 
+**Database Drop**
+----
+
+Drops a database.
+
+* **URL**
+
+  _/api/database/drop_
+
+* **Method:**
+  
+  `POST`
+  
+* **Data Params**
+
+  **Required:**
+ 
+   `database_name=[alphanumeric]`
+   
+  **Optional:**
+ 
+   `master_password=[alphanumeric]`
+   
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `True`
+ 
+* **Error Response:**
+    
+  * **Code:** 400 BAD REQUEST  <br />
+    **Content:** `{'error': "arguments_missing ..."}`
+
+* **Sample Call:**
+
+```javascript
+$.ajax({
+  type: "POST",
+  url: "/api/database/drop",
+  data: {
+    database_name: "rest",
+  },
+  success: success,
+});
+```
+
+* **Sample Response:**
+
+```
+True
+```
+
+**Database Backup**
+----
+
+Creates a backup.
+
+* **URL**
+
+  _/api/database/backup_
+
+* **Method:**
+  
+  `POST`
+  
+* **Data Params**
+
+  **Required:**
+ 
+   `database_name=[alphanumeric]`
+   
+  **Optional:**
+ 
+   `master_password=[alphanumeric]`
+   
+   `backup_format=[zip|dump]`
+   
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `File Response`
+ 
+* **Error Response:**
+    
+  * **Code:** 400 BAD REQUEST  <br />
+    **Content:** `{'error': "arguments_missing ..."}`
+
+* **Sample Call:**
+
+```javascript
+$.ajax({
+  type: "POST",
+  url: "/api/database/backup",
+  data: {
+    database_name: "rest",
+  },
+  success: success,
+});
+```
+
+* **Sample Response:**
+
+```
+File Response
+```
+
+**Database Restore**
+----
+
+Creates a backup.
+
+* **URL**
+
+  _/api/database/restore_
+
+* **Method:**
+  
+  `POST`
+  
+* **Data Params**
+
+  **Required:**
+ 
+   `database_name=[alphanumeric]`
+
+   `backup_file=[file]`
+   
+  **Optional:**
+ 
+   `master_password=[alphanumeric]`
+   
+   `copy=[True|False]`
+   
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `True`
+ 
+* **Error Response:**
+    
+  * **Code:** 400 BAD REQUEST  <br />
+    **Content:** `{'error': "arguments_missing ..."}`
+
+* **Sample Call:**
+
+```javascript
+$.ajax({
+  type: "POST",
+  url: "/api/database/restore",
+  data: {
+    database_name: "rest",
+    backup_file: file
+  },
+  success: success,
+});
+```
+
+* **Sample Response:**
+
+```
+True
+```
+
 **Authentication**
 ----
 
