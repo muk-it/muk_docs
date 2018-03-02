@@ -946,6 +946,78 @@ $.ajax({
 File Response
 ```
 
+**Binary**
+----
+
+Downloads a binary file.
+
+* **URL**
+
+  _/api/binary_
+
+* **Method:**
+  
+  `GET`
+  
+* **Data Params**
+
+  **Required:**
+ 
+   `token=[alphanumeric]`
+   
+  **Optional:**
+ 
+   `xmlid=[alphanumeric]`
+   
+   `model=[alphanumeric]`
+   
+   `id=[number]`
+   
+   `field=[alphanumeric]`
+   
+   `filename=[alphanumeric]`
+   
+   `filename_field=[alphanumeric]`
+   
+   `unique=[alphanumeric]`
+   
+   `mimetype=[alphanumeric]`
+   
+   `data=[data]`
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `file`
+ 
+* **Error Response:**
+
+  * **Code:** 403 FORBIDDEN <br />
+    **Content:** `"error": "token_invalid"`
+    
+  * **Code:** 400 BAD REQUEST  <br />
+    **Content:** `{'error': "arguments_missing ..."}`
+
+* **Sample Call:**
+
+```javascript
+$.ajax({
+  type: "GET",
+  url: "/api/report",
+  data: {
+    token: "...",
+    id: 1,
+  },
+  success: success,
+});
+```
+
+* **Sample Response:**
+
+```
+File Response
+```
+
 ## Notes and Credits
 
 The app icon is based on an icon made by [Prosymbols](https://www.flaticon.com/packs/web-design-and-development-12) from [www.flaticon.com](www.flaticon.com)
