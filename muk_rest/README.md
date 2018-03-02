@@ -213,6 +213,61 @@ $.ajax({
 True
 ```
 
+**Database Duplicate**
+----
+
+Duplicates a database.
+
+* **URL**
+
+  _/api/database/duplicate_
+
+* **Method:**
+  
+  `POST`
+  
+* **Data Params**
+
+  **Required:**
+ 
+   `database_old=[alphanumeric]`
+   
+   `database_new=[alphanumeric]`
+   
+  **Optional:**
+ 
+   `master_password=[alphanumeric]`
+   
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `True`
+ 
+* **Error Response:**
+    
+  * **Code:** 400 BAD REQUEST  <br />
+    **Content:** `{'error': "arguments_missing ..."}`
+
+* **Sample Call:**
+
+```javascript
+$.ajax({
+  type: "POST",
+  url: "/api/database/duplicate",
+  data: {
+    database_old: "rest_old",
+    database_new: "rest_new",
+  },
+  success: success,
+});
+```
+
+* **Sample Response:**
+
+```
+True
+```
+
 **Authentication**
 ----
 
