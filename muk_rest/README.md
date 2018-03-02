@@ -10,6 +10,52 @@ Parameter: `--load=web,muk_rest`
 
 ## API Documentation
 
+**Version**
+----
+
+Retrieves the system version information.
+
+* **URL**
+
+  _/api
+
+* **Method:**
+  
+  `GET`
+  
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `{...}`
+
+* **Sample Call:**
+
+```javascript
+$.ajax({
+  type: "GET",
+  url: "/api",
+  success: success,
+});
+```
+
+* **Sample Response:**
+
+```
+{
+  "api_version": 1,
+  "server_serie": "11.0",
+  "server_version": "11.0",
+  "server_version_info": [
+    11,
+    0,
+    0,
+    "final",
+     0,
+     ""
+  ]
+}
+```
+
 **Authentication**
 ----
 
