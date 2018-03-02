@@ -151,6 +151,67 @@ $.ajax({
 }
 ```
 
+**Database Create**
+----
+
+Creates a new database.
+
+* **URL**
+
+  _/api/database/create_
+
+* **Method:**
+  
+  `POST`
+  
+* **Data Params**
+
+  **Required:**
+ 
+   `database_name=[alphanumeric]`
+   
+   `admin_login=[alphanumeric]`
+   
+   `admin_password=[alphanumeric]`
+   
+  **Optional:**
+ 
+   `master_password=[alphanumeric]`
+   
+   `lang=[alphanumeric]`
+   
+   `country_code=[alphanumeric]`
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `True`
+ 
+* **Error Response:**
+    
+  * **Code:** 400 BAD REQUEST  <br />
+    **Content:** `{'error': "arguments_missing ..."}`
+
+* **Sample Call:**
+
+```javascript
+$.ajax({
+  type: "POST",
+  url: "/api/database/create",
+  data: {
+    database_name: "rest",
+    admin_login: "admin",
+    admin_password: "admin",
+  },
+  success: success,
+});
+```
+
+* **Sample Response:**
+
+```
+True
+```
 
 **Authentication**
 ----
