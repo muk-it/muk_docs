@@ -1003,7 +1003,7 @@ Downloads a binary file.
 ```javascript
 $.ajax({
   type: "GET",
-  url: "/api/report",
+  url: "/api/binary",
   data: {
     token: "...",
     id: 1,
