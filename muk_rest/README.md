@@ -1107,7 +1107,7 @@ Deletes an existing record.
 
 * **URL**
 
-  _/api/delete_
+  _/api/unlink_
 
 * **Method:**
   
