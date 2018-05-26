@@ -66,6 +66,8 @@ javascript: (function(e, s) {
 			jQuery.when(api()).then(function() {
 				authenticate().then(function(token) {
 					console.log(token);
+					
+					// Insert your code here!
 				});
 			});
 		} else {
