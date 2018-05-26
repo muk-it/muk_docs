@@ -156,14 +156,44 @@ var search = function(token, model, id, domain, context, count, limit, offset, o
 }
 
 // Create
-var create = function(token) {
+var create = function(token, model, values, context) {
 	finished = jQuery.Deferred();
 	jQuery.ajax({
 		dataType: 'json',
-		type: "GET",
-		url: proxy + url + "/api/search",
+		type: "POST",
+		url: proxy + url + "/api/create",
 		data: {
 			token: token,
+			db: "demo",
+			model: model,
+			values: values,
+			context: context,
+		},
+		success: function(result) {
+			console.log(result);
+			finished.resolve(result);
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			console.error(textStatus, errorThrown);
+			finished.resolve();
+		},
+	});
+	return finished;
+}
+
+// Delete
+var unlink = function(token, model, ids, context) {
+	finished = jQuery.Deferred();
+	jQuery.ajax({
+		dataType: 'json',
+		type: "DELETE",
+		url: proxy + url + "/api/create",
+		data: {
+			token: token,
+			db: "demo",
+			model: model,
+			ids: ids,
+			context: context,
 		},
 		success: function(result) {
 			console.log(result);
@@ -197,23 +227,34 @@ javascript: (function(e, s) {
 					
 					life(token).done(function() {
 						refresh(token).done(function() {
-							life(token);
 							
-							search(token, "res.users", undefined, [['active', '=', 'True']],
-								{'bin_size': 'True'}, undefined, undefined, undefined, "name asc");
+							var requests = [];
 							
-							search(token, "res.users", 1, undefined, undefined, undefined,
-								undefined, undefined, undefined);
+							requests.push(life(token));
 							
-							search(token, "res.users", undefined, undefined, undefined, true,
-								undefined, undefined, undefined);
-								
-							search(token, "res.users", undefined, undefined, undefined,
-								undefined, 2, 1, undefined);
+							requests.push(search(token, "res.users", undefined,
+								[['active', '=', 'True']], {'bin_size': 'True'},
+								undefined, undefined, undefined, "name asc"));
 							
+							requests.push(search(token, "res.users", 1, undefined,
+								undefined, undefined, undefined, undefined, undefined));
 							
+							requests.push(search(token, "res.users", undefined, undefined,
+								undefined, true, undefined, undefined, undefined));
 							
-							// close(token);
+							var cleaned = jQuery.Deferred();
+							requests.push(cleaned);
+							create(token, "res.partner.category", '{"name": "REST_TAG"}', undefined)
+							.then(function(data) {
+								unlink(token, "res.partner.category", data.id)
+								.then(function() {
+									cleaned.resolve();
+								});
+							});
+							
+							jQuery.when.apply(jQuery, requests).then(function() {
+								close(token);
+							});
 						});
 					});
 
