@@ -1,4 +1,12 @@
-# Example
+# Examples
+
+Here you can find some examples of how you can use the REST API.
+
+## Javascript
+
+The easiest way to test the API is to open the Chrome Browser and then go to a website like www.google.com. Afterwards you only have to insert and execute the javascript code listed below into the console.
+
+The code will automatically load JQuery and then connect to the REST API. You can then extend the code as you like or call additional ajax calls directly from the console. Examples can be found in [example.js](./example.js).
 
 ```javascript
 // Base URL
@@ -78,5 +86,12 @@ javascript: (function(e, s) {
 	};
 	document.head.appendChild(e);
 })(document.createElement('script'), '//code.jquery.com/jquery-latest.min.js');
+```
 
+## Python
+
+Just like the Javascript code above, the python code can be executed directly in the python shell to test the API.
+
+```python
+123
 ```
