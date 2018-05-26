@@ -65,7 +65,7 @@ javascript: (function(e, s) {
 			// Test API
 			jQuery.when(api()).then(function() {
 				authenticate().then(function(token) {
-					console.log(token);
+					console.log(token.token);
 					
 					// Insert your code here!
 				});
