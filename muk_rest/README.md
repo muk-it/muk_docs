@@ -1,6 +1,6 @@
 # Restful API
 
-Enables a REST API for the Odoo server. The API has routes to authenticate and retrieve a token. Afterwards, a set of routes to interact with the server are provided.
+Enables a REST API for the Odoo server. The API has routes to authenticate and retrieve a token. Afterwards, a set of routes to interact with the server are provided. Further information about every route can be found [here](https://muk-it.github.io/muk_docs_rest/).
 
 ## Setup
 
