@@ -246,10 +246,14 @@ javascript: (function(e, s) {
 							requests.push(cleaned);
 							create(token, "res.partner.category", '{"name": "REST_TAG"}', undefined)
 							.then(function(data) {
-								unlink(token, "res.partner.category", data.id)
-								.then(function() {
+								if(data) {
+									unlink(token, "res.partner.category", data.id)
+									.then(function() {
+										cleaned.resolve();
+									});
+								} else {
 									cleaned.resolve();
-								});
+								}
 							});
 							
 							jQuery.when.apply(jQuery, requests).then(function() {
