@@ -21,8 +21,7 @@ scope = ['all']
 
 
 oauth = OAuth2Session(client=LegacyApplicationClient(client_id=client_id))
-oauth.fetch_token(token_url=token_url,
-	username=username, password=password,
+oauth.fetch_token(token_url=token_url, username=username, password=password,
 	client_id=client_id, client_secret=client_secret)
 
 print(oauth.get("http://localhost:8069/api/user").json())
