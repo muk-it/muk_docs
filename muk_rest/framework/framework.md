@@ -112,7 +112,7 @@ This decorator can be used to ensure that a module is installed before executing
 ```python
 from odoo.addons.muk_rest import tools
 
-@tools.common.protected(operations=['read'], check_custom_routes=False, *args, **kwargs):
+@tools.common.protected(operations=['read'], check_custom_routes=False)
 def method(self, **kw):
 	...
 ```
@@ -122,7 +122,6 @@ This decorator ensures that the corresponding method is allowed on the API clien
 ### Helper - ResponseEncoder
 
 Json Encoder, which handles the seralization during the dump creation.
-
 
 ### Helper - RecordEncoder
 
