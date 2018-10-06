@@ -19,7 +19,6 @@ username = 'admin'
 password = 'admin'
 scope = ['all']
 
-
 oauth = OAuth2Session(client=LegacyApplicationClient(client_id=client_id))
 oauth.fetch_token(token_url=token_url, username=username, password=password,
 	client_id=client_id, client_secret=client_secret)
