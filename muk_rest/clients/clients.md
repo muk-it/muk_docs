@@ -1,4 +1,4 @@
-# Examples
+# Clients
 
 Here you can find some examples of how you can use the REST API.
 
