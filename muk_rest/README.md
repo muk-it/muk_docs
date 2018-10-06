@@ -8,7 +8,7 @@ interact with the server are provided.
 
 To install this module, you need to:
 
-([Download]) the module and add it to your Odoo addons folder. Afterward,
+[Download] the module and add it to your Odoo addons folder. Afterward,
 log on to your Odoo server and go to the Apps menu. Trigger the debug
 mode and update the list by clicking on the "Update Apps List" link. Now
 install the module by clicking on the install button.
@@ -46,7 +46,7 @@ more detailed installation guide on our [website].
 
 To upgrade this module, you need to:
 
-([Download]) the module and add it to your Odoo addons folder. Restart the
+[Download] the module and add it to your Odoo addons folder. Restart the
 server and log on to your Odoo server. Select the Apps menu and upgrade
 the module by clicking on the upgrade button.
 
@@ -69,10 +69,24 @@ parameter to the start script.
 
 Parameter: `--load=web,muk_rest`
 
+To configure this module, you need to:
+
+1.  Go to *Settings -\> Restful API -\> Dashboard*. Here you can see an
+    overview of all your APIs.
+2.  Click on *Create* or go to either *Restful API -\> OAuth1* or
+    *Restful API -\> OAuth2* to create a new API.
+
 ### Usage
 
-This module has no direct visible effect on the system. It provides a
-set of routes to interact with the system via HTTP requests.
+This module provides a set of routes to interact with the system via
+HTTP requests. Take a look at the `clients
+<https://github.com/muk-it/muk_docs/blob/12%2C0/muk_rest/clients/clients.md>`*
+and `examples
+<https://github.com/muk-it/muk_docs/blob/12%2C0/muk_rest/examples/examples.md>`*
+or open the `documentation
+<https://github.com/muk-it/muk_docs/blob/12%2C0/muk_rest/clients/clients.md>`\_
+to get a detailed description of every available route.
+
 
 [Download]: https://apps.odoo.com/apps/modules/12.0/muk_rest/
 [PyPI]: https://pypi.org/project/pip/
