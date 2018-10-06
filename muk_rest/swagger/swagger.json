@@ -1,0 +1,950 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "Download the [REST API](https://www.odoo.com/apps/modules/12.0/muk_rest/) for [Odoo](https://www.odoo.com). </br> </br> Enables a REST API for the Odoo server. The API has routes to authenticate and retrieve a token. Afterwards, a set of routes to interact with the server are provided. The API can be used by any language or framework which can make an HTTP requests and receive responses with JSON payloads and works with both the Community and the Enterprise Edition.",
+    "version" : "3.0.0",
+    "title" : "MuK REST API for Odoo",
+    "contact" : {
+      "url" : "https://www.mukit.at",
+      "email" : "support@mukit.at"
+    },
+    "license" : {
+      "name" : "Odoo Proprietary License v1.0",
+      "url" : "https://www.odoo.com/documentation/user/12.0/legal/licenses/licenses.html#licenses"
+    },
+    "x-logo" : {
+      "url" : "https://mukit.at/web/binary/company_logo"
+    }
+  },
+  "host" : "virtserver.swaggerhub.com",
+  "basePath" : "/keshrath/muk_rest/3.0.0",
+  "tags" : [ {
+    "name" : "Authentication",
+    "description" : "OAuth1 and OAuth2"
+  }, {
+    "name" : "Search & Read",
+    "description" : "Retrieve data from the server"
+  }, {
+    "name" : "Create & Write & Delete",
+    "description" : "Retrieve data from the server"
+  } ],
+  "schemes" : [ "https" ],
+  "paths" : {
+    "/authentication/oauth1/initiate" : {
+      "post" : {
+        "tags" : [ "Authentication" ],
+        "summary" : "OAuth1 - Temporary Credentials Acquisition",
+        "description" : "Request system information. All headers must be passed via the OAuth header.",
+        "parameters" : [ {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "Example"
+        }, {
+          "name" : "oauth_consumer_key",
+          "in" : "header",
+          "description" : "Consumer Key",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "ac4c9d93ea8e48b78fe0fd470680b09d"
+        }, {
+          "name" : "oauth_nonce",
+          "in" : "header",
+          "description" : "Nonce",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "71257790252100875101500704380"
+        }, {
+          "name" : "oauth_callback",
+          "in" : "header",
+          "description" : "Callback",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "https://127.0.0.1/callback"
+        }, {
+          "name" : "oauth_signature_method",
+          "in" : "header",
+          "description" : "Signature Method",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "HMAC-SHA1"
+        }, {
+          "name" : "oauth_timestamp",
+          "in" : "header",
+          "description" : "Timestamp",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "1500704388"
+        }, {
+          "name" : "oauth_signature",
+          "in" : "header",
+          "description" : "Signature",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "KbLt0XDVjljXhMJHmmpWxHkFnfs"
+        }, {
+          "name" : "oauth_version",
+          "in" : "header",
+          "description" : "Version",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "1.0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Temporary Credentials",
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "type" : {
+                  "type" : "string"
+                },
+                "color" : {
+                  "type" : "string"
+                }
+              },
+              "example" : {
+                "oauth_token" : "mXYKtuv8k3NJfnpLMpU3KFuEijXx2Aat",
+                "oauth_token_secret" : "QAlvAmzyULWeitpe24oNhj3n91los7W5"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/authentication/oauth1/authorize" : {
+      "get" : {
+        "tags" : [ "Authentication" ],
+        "summary" : "OAuth1 - Authorization",
+        "description" : "Authenticates the user with the Odoo server.",
+        "parameters" : [ {
+          "name" : "oauth_token",
+          "in" : "query",
+          "description" : "Token",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "mXYKtuv8k3NJfnpLMpU3KFuEijXx2Aat"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Verifier",
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "type" : {
+                  "type" : "string"
+                },
+                "color" : {
+                  "type" : "string"
+                }
+              },
+              "example" : {
+                "oauth_token" : "mXYKtuv8k3NJfnpLMpU3KFuEijXx2Aat",
+                "oauth_verifier" : "sdflk3450FASDLJasd2349dfs"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/authentication/oauth1/token" : {
+      "post" : {
+        "tags" : [ "Authentication" ],
+        "summary" : "OAuth1 - Token Exchange",
+        "description" : "Exchange temporary credentials with the access token. All headers must be passed via the OAuth header.",
+        "parameters" : [ {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "Example"
+        }, {
+          "name" : "oauth_consumer_key",
+          "in" : "header",
+          "description" : "Consumer Key",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "ac4c9d93ea8e48b78fe0fd470680b09d"
+        }, {
+          "name" : "oauth_nonce",
+          "in" : "header",
+          "description" : "Nonce",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "156754554473268986001500738176"
+        }, {
+          "name" : "oauth_timestamp",
+          "in" : "header",
+          "description" : "Timestamp",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "123456789"
+        }, {
+          "name" : "oauth_token",
+          "in" : "header",
+          "description" : "Token",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "mXYKtuv8k3NJfnpLMpU3KFuEijXx2Aat"
+        }, {
+          "name" : "oauth_signature_method",
+          "in" : "header",
+          "description" : "Signature Method",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "oauth_signature_method"
+        }, {
+          "name" : "oauth_verifier",
+          "in" : "header",
+          "description" : "Verifier",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "sdflk3450FASDLJasd2349dfs"
+        }, {
+          "name" : "oauth_signature",
+          "in" : "header",
+          "description" : "Signature",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "KbLt0XDVjljXhMJHmmpWxHkFnfs"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Access Token",
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "type" : {
+                  "type" : "string"
+                },
+                "color" : {
+                  "type" : "string"
+                }
+              },
+              "example" : {
+                "oauth_token" : "RF7gImCv0B58eogLiPmOmNPizZEVVUWP",
+                "oauth_token_secret" : "oxBUTIjTl8gfbxEv2jpXo5rRtQ16u3Lg"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/authentication/oauth2/authorize" : {
+      "get" : {
+        "tags" : [ "Authentication" ],
+        "summary" : "OAuth2 - Authorization",
+        "description" : "Authenticates the user with the Odoo server. All headers must be passed via the OAuth header. </br> The Web Application Flow is taken as an example. </br> The API supports all 4 OAuth2 Grant Types.",
+        "parameters" : [ {
+          "name" : "client_id",
+          "in" : "header",
+          "description" : "Client ID",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "uwCrAHAQbL7D9cvJLIztNaZ0bziEGMDh"
+        }, {
+          "name" : "state",
+          "in" : "header",
+          "description" : "State",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "Y1Ux1iNPvn6KYQK5Lj84WJ9VJrQw1L"
+        }, {
+          "name" : "redirect_uri",
+          "in" : "header",
+          "description" : "Callback",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "https://127.0.0.1/callback"
+        }, {
+          "name" : "response_type",
+          "in" : "header",
+          "description" : "Response Type",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "code"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Authorization Code",
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "type" : {
+                  "type" : "string"
+                },
+                "color" : {
+                  "type" : "string"
+                }
+              },
+              "example" : {
+                "code" : "dcee1806d2c50d0fb598",
+                "state" : "Y1Ux1iNPvn6KYQK5Lj84WJ9VJrQw1L"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/authentication/oauth2/token" : {
+      "post" : {
+        "tags" : [ "Authentication" ],
+        "summary" : "OAuth2 - Token Credentials",
+        "description" : "Fetches the access token from the server. All headers must be passed via the OAuth header. </br> The Web Application Flow is taken as an example. </br> The API supports all 4 OAuth2 Grant Types.",
+        "parameters" : [ {
+          "name" : "client_id",
+          "in" : "header",
+          "description" : "Client ID",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "uwCrAHAQbL7D9cvJLIztNaZ0bziEGMDh"
+        }, {
+          "name" : "client_secret",
+          "in" : "header",
+          "description" : "Client Secret",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "FtHzOQVEs0aSEL9AXuIe9k7X6E2MekU7"
+        }, {
+          "name" : "redirect_uri",
+          "in" : "header",
+          "description" : "Callback",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "https://127.0.0.1/callback"
+        }, {
+          "name" : "grant_type",
+          "in" : "header",
+          "description" : "Grant Type",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "authorization_code"
+        }, {
+          "name" : "code",
+          "in" : "header",
+          "description" : "Code",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "dcee1806d2c50d0fb598"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Authorization Code",
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "type" : {
+                  "type" : "string"
+                },
+                "color" : {
+                  "type" : "string"
+                }
+              },
+              "example" : {
+                "access_token" : "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIn",
+                "token_type" : "bearer",
+                "expires_in" : "7/20/2017 12:00:05",
+                "refresh_token" : "ZXIiLCJnaXZlbl9uYW1lIjoiRnJhbmsifQ"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/authentication/oauth2/revoke" : {
+      "post" : {
+        "tags" : [ "Authentication" ],
+        "summary" : "OAuth2 - Revoke Token",
+        "description" : "Revokes the access token.",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "client_id",
+          "description" : "Client ID",
+          "required" : true,
+          "x-example" : "uwCrAHAQbL7D9cvJLIztNaZ0bziEGMDh"
+        }, {
+          "in" : "body",
+          "name" : "token",
+          "description" : "Access Token",
+          "required" : true,
+          "x-example" : "dcee1806d2c50d0fb598"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "TODO"
+          }
+        }
+      }
+    },
+    "/search/{model}" : {
+      "get" : {
+        "tags" : [ "Search & Read" ],
+        "summary" : "Search",
+        "description" : "Request system information.",
+        "parameters" : [ {
+          "name" : "model",
+          "in" : "path",
+          "description" : "Model in the environment",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "res.partner"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "IDs",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "integer",
+                "format" : "int32"
+              },
+              "example" : [ 1, 2, 3 ]
+            }
+          }
+        },
+        "security" : [ {
+          "implicit" : [ "all" ]
+        } ]
+      }
+    },
+    "/search/{model}/{order}" : {
+      "get" : {
+        "tags" : [ "Search & Read" ],
+        "summary" : "Search",
+        "description" : "Request system information.",
+        "parameters" : [ {
+          "name" : "model",
+          "in" : "path",
+          "description" : "Model in the environment",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "res.partner"
+        }, {
+          "name" : "order",
+          "in" : "path",
+          "description" : "Sort string (asc, desc)",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "name desc"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "IDs",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "integer",
+                "format" : "int32"
+              },
+              "example" : [ 1, 2, 3 ]
+            }
+          }
+        },
+        "security" : [ {
+          "implicit" : [ "all" ]
+        } ]
+      }
+    },
+    "/search/{model}/{limit}/{order}" : {
+      "get" : {
+        "tags" : [ "Search & Read" ],
+        "summary" : "Search",
+        "description" : "Request system information.",
+        "parameters" : [ {
+          "name" : "model",
+          "in" : "path",
+          "description" : "Model in the environment",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "res.partner"
+        }, {
+          "name" : "limit",
+          "in" : "path",
+          "description" : "Limt of the search",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32",
+          "x-example" : 25
+        }, {
+          "name" : "order",
+          "in" : "path",
+          "description" : "Sort string (asc, desc)",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "name desc"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "IDs",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "integer",
+                "format" : "int32"
+              },
+              "example" : [ 1, 2, 3 ]
+            }
+          }
+        },
+        "security" : [ {
+          "implicit" : [ "all" ]
+        } ]
+      }
+    },
+    "/search/{model}/{limit}/{offset}/{order}" : {
+      "get" : {
+        "tags" : [ "Search & Read" ],
+        "summary" : "Search",
+        "description" : "Request system information.",
+        "parameters" : [ {
+          "name" : "model",
+          "in" : "path",
+          "description" : "Model in the environment",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "res.partner"
+        }, {
+          "name" : "limit",
+          "in" : "path",
+          "description" : "Limt of the search",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32",
+          "x-example" : 25
+        }, {
+          "name" : "offset",
+          "in" : "path",
+          "description" : "Offset of the search",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32",
+          "x-example" : 1
+        }, {
+          "name" : "order",
+          "in" : "path",
+          "description" : "Sort string (asc, desc)",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "name desc"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "IDs",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "integer",
+                "format" : "int32"
+              },
+              "example" : [ 1, 2, 3 ]
+            }
+          }
+        },
+        "security" : [ {
+          "implicit" : [ "all" ]
+        } ]
+      }
+    },
+    "/name/{model}" : {
+      "get" : {
+        "tags" : [ "Search & Read" ],
+        "summary" : "Search",
+        "description" : "Request system information.",
+        "parameters" : [ {
+          "name" : "model",
+          "in" : "path",
+          "description" : "Model in the environment",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "res.partner"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "array"
+              },
+              "example" : [ [ 1, "YourCompany" ], [ 2, "System" ] ]
+            }
+          }
+        },
+        "security" : [ {
+          "implicit" : [ "all" ]
+        } ]
+      }
+    },
+    "/read/{model}" : {
+      "get" : {
+        "tags" : [ "Search & Read" ],
+        "summary" : "Search",
+        "description" : "Request system information.",
+        "parameters" : [ {
+          "name" : "model",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "TODO"
+          }
+        },
+        "security" : [ {
+          "implicit" : [ "all" ]
+        } ]
+      }
+    },
+    "/search_read/{model}" : {
+      "get" : {
+        "tags" : [ "Search & Read" ],
+        "summary" : "Search",
+        "description" : "Request system information.",
+        "parameters" : [ {
+          "name" : "model",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "TODO"
+          }
+        },
+        "security" : [ {
+          "implicit" : [ "all" ]
+        } ]
+      }
+    },
+    "/search_read/{model}/{order}" : {
+      "get" : {
+        "tags" : [ "Search & Read" ],
+        "summary" : "Search",
+        "description" : "Request system information.",
+        "parameters" : [ {
+          "name" : "model",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "order",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "TODO"
+          }
+        },
+        "security" : [ {
+          "implicit" : [ "all" ]
+        } ]
+      }
+    },
+    "/search_read/{model}/{limit}/{order}" : {
+      "get" : {
+        "tags" : [ "Search & Read" ],
+        "summary" : "Version",
+        "description" : "Request system information.",
+        "parameters" : [ {
+          "name" : "model",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "limit",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "order",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "TODO"
+          }
+        },
+        "security" : [ {
+          "implicit" : [ "all" ]
+        } ]
+      }
+    },
+    "/search_read/{model}/{limit}/{offset}/{order}" : {
+      "get" : {
+        "tags" : [ "Search & Read" ],
+        "summary" : "Version",
+        "description" : "Request system information.",
+        "parameters" : [ {
+          "name" : "model",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "limit",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "offset",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "order",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "TODO"
+          }
+        },
+        "security" : [ {
+          "implicit" : [ "all" ]
+        } ]
+      }
+    },
+    "/read_group/{model}" : {
+      "get" : {
+        "tags" : [ "Search & Read" ],
+        "summary" : "Version",
+        "description" : "Request system information.",
+        "parameters" : [ {
+          "name" : "model",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "TODO"
+          }
+        },
+        "security" : [ {
+          "implicit" : [ "all" ]
+        } ]
+      }
+    },
+    "/read_group/{model}/{orderby}" : {
+      "get" : {
+        "tags" : [ "Search & Read" ],
+        "summary" : "Version",
+        "description" : "Request system information.",
+        "parameters" : [ {
+          "name" : "model",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "orderby",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "TODO"
+          }
+        },
+        "security" : [ {
+          "implicit" : [ "all" ]
+        } ]
+      }
+    },
+    "/read_group/{model}/{limit}/{orderby}" : {
+      "get" : {
+        "tags" : [ "Search & Read" ],
+        "summary" : "Version",
+        "description" : "Request system information.",
+        "parameters" : [ {
+          "name" : "model",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "limit",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "orderby",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "TODO"
+          }
+        },
+        "security" : [ {
+          "implicit" : [ "all" ]
+        } ]
+      }
+    },
+    "/read_group/{model}/{limit}/{offset}/{orderby}" : {
+      "get" : {
+        "tags" : [ "Search & Read" ],
+        "summary" : "Version",
+        "description" : "Request system information.",
+        "parameters" : [ {
+          "name" : "model",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "limit",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "offset",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "orderby",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "TODO"
+          }
+        },
+        "security" : [ {
+          "implicit" : [ "all" ]
+        } ]
+      }
+    },
+    "/create" : {
+      "post" : {
+        "tags" : [ "Create & Write & Delete" ],
+        "summary" : "Version",
+        "description" : "Request system information.",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "TODO"
+          }
+        },
+        "security" : [ {
+          "implicit" : [ "all" ]
+        } ]
+      }
+    },
+    "/write" : {
+      "put" : {
+        "tags" : [ "Create & Write & Delete" ],
+        "summary" : "Version",
+        "description" : "Request system information.",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "TODO"
+          }
+        },
+        "security" : [ {
+          "implicit" : [ "all" ]
+        } ]
+      }
+    },
+    "/unlink" : {
+      "delete" : {
+        "tags" : [ "Create & Write & Delete" ],
+        "summary" : "Version",
+        "description" : "Request system information.",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "TODO"
+          }
+        },
+        "security" : [ {
+          "implicit" : [ "all" ]
+        } ]
+      }
+    }
+  },
+  "securityDefinitions" : {
+    "implicit" : {
+      "type" : "oauth2",
+      "authorizationUrl" : "https:demo.mukit.at/api/authentication/oauth2/authorize",
+      "flow" : "implicit",
+      "scopes" : {
+        "all" : "Basic security settings without additional restrictions"
+      }
+    }
+  },
+  "definitions" : {
+    "inline_response_200_1" : {
+      "properties" : {
+        "type" : {
+          "type" : "string"
+        },
+        "color" : {
+          "type" : "string"
+        }
+      },
+      "example" : "{oauth_token=mXYKtuv8k3NJfnpLMpU3KFuEijXx2Aat, oauth_verifier=sdflk3450FASDLJasd2349dfs}"
+    },
+    "inline_response_200" : {
+      "properties" : {
+        "type" : {
+          "type" : "string"
+        },
+        "color" : {
+          "type" : "string"
+        }
+      },
+      "example" : "{oauth_token=mXYKtuv8k3NJfnpLMpU3KFuEijXx2Aat, oauth_token_secret=QAlvAmzyULWeitpe24oNhj3n91los7W5}"
+    },
+    "inline_response_200_2" : {
+      "properties" : {
+        "type" : {
+          "type" : "string"
+        },
+        "color" : {
+          "type" : "string"
+        }
+      },
+      "example" : "{oauth_token=RF7gImCv0B58eogLiPmOmNPizZEVVUWP, oauth_token_secret=oxBUTIjTl8gfbxEv2jpXo5rRtQ16u3Lg}"
+    },
+    "inline_response_200_3" : {
+      "properties" : {
+        "type" : {
+          "type" : "string"
+        },
+        "color" : {
+          "type" : "string"
+        }
+      },
+      "example" : "{code=dcee1806d2c50d0fb598, state=Y1Ux1iNPvn6KYQK5Lj84WJ9VJrQw1L}"
+    },
+    "inline_response_200_4" : {
+      "properties" : {
+        "type" : {
+          "type" : "string"
+        },
+        "color" : {
+          "type" : "string"
+        }
+      },
+      "example" : "{access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIn, token_type=bearer, expires_in=7/20/2017 12:00:05, refresh_token=ZXIiLCJnaXZlbl9uYW1lIjoiRnJhbmsifQ}"
+    }
+  },
+  "externalDocs" : {
+    "description" : "Documentation and Examples",
+    "url" : "https://github.com/muk-it/muk_docs/tree/12.0/muk_rest"
+  }
+}
