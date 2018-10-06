@@ -61,10 +61,16 @@ class ExtendMyController(MyController):
 	@tools.common.ensure_module()
 	@tools.security.protected()
 	def myroute(self, **kw):
-	    result = super(ExtendMyController, self).myroute(kw)
-	    content = json.dumps(result, sort_keys=True, indent=4, cls=ResponseEncoder)
-	    return Response(content, content_type='application/json;charset=utf-8', status=200)
+	    response = super(ExtendMyController, self).myroute(kw)
+	    ...
+	    return response
 ```
 
 ## Helper
 
+Take a look now at the available helper and decorators.
+
+## Decorator - parse_exception
+
+This decorator ensures that exceptions that occur during the execution of the method are
+parsed into a json response and a corresponding response is returned to the API client.
