@@ -79,16 +79,13 @@ To configure this module, you need to:
 ### Usage
 
 This module provides a set of routes to interact with the system via
-HTTP requests. Take a look at the `clients
-<https://github.com/muk-it/muk_docs/blob/12%2C0/muk_rest/clients/clients.md>`*
-and `examples
-<https://github.com/muk-it/muk_docs/blob/12%2C0/muk_rest/examples/examples.md>`*
-or open the `documentation
-<https://github.com/muk-it/muk_docs/blob/12%2C0/muk_rest/clients/clients.md>`\_
-to get a detailed description of every available route.
-
+HTTP requests. Take a look at the [clients] and [examples] or open the 
+[documentation] to get a detailed description of every available route.
 
 [Download]: https://apps.odoo.com/apps/modules/12.0/muk_rest/
+[clients]: https://github.com/muk-it/muk_docs/blob/12%2C0/muk_rest/clients/clients.md
+[examples]: https://github.com/muk-it/muk_docs/blob/12%2C0/muk_rest/examples/examples.md
+[documentation]: https://app.swaggerhub.com/apis/keshrath/muk_rest/docs/3.0.0/
 [PyPI]: https://pypi.org/project/pip/
 [odoo-autodiscover]: https://pypi.org/project/odoo-autodiscover/
 [repository]: https://nexus.mukit.at/#browse/browse:odoo
