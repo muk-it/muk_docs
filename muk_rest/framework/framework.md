@@ -21,21 +21,21 @@ from odoo import http
 from odoo.http import request, Response
 
 from odoo.addons.muk_rest import tools
-from odoo.addons.muk_rest.tools.encode import ResponseEncoder		
-				
+from odoo.addons.muk_rest.tools.encode import ResponseEncoder        
+                
 class MyController(odoo.http.Controller):
 
-	@odoo.http.route([
-	    '/api/myapp/myroute'
-	], auth="none", type='http', methods=['GET'], csrf=False)
-	@tools.common.parse_exception
-	@tools.common.ensure_database
-	@tools.common.ensure_module()
-	@tools.security.protected()
-	def myroute(self, **kw):
-	    result = ...
-	    content = json.dumps(result, sort_keys=True, indent=4, cls=ResponseEncoder)
-	    return Response(content, content_type='application/json;charset=utf-8', status=200)
+    @odoo.http.route([
+        '/api/myapp/myroute'
+    ], auth="none", type='http', methods=['GET'], csrf=False)
+    @tools.common.parse_exception
+    @tools.common.ensure_database
+    @tools.common.ensure_module()
+    @tools.security.protected()
+    def myroute(self, **kw):
+        result = ...
+        content = json.dumps(result, sort_keys=True, indent=4, cls=ResponseEncoder)
+        return Response(content, content_type='application/json;charset=utf-8', status=200)
 ```
 
 ## Changing routes in the API
@@ -49,21 +49,21 @@ from odoo import http
 from odoo.http import request, Response
 
 from odoo.addons.muk_rest import tools
-from odoo.addons.muk_rest.tools.encode import ResponseEncoder		
-				
+from odoo.addons.muk_rest.tools.encode import ResponseEncoder        
+                
 class ExtendMyController(MyController):
 
-	@odoo.http.route([
-	    '/api/myapp/myroute'
-	], auth="none", type='http', methods=['GET'], csrf=False)
-	@tools.common.parse_exception
-	@tools.common.ensure_database
-	@tools.common.ensure_module()
-	@tools.security.protected()
-	def myroute(self, **kw):
-	    response = super(ExtendMyController, self).myroute(kw)
-	    ...
-	    return response
+    @odoo.http.route([
+        '/api/myapp/myroute'
+    ], auth="none", type='http', methods=['GET'], csrf=False)
+    @tools.common.parse_exception
+    @tools.common.ensure_database
+    @tools.common.ensure_module()
+    @tools.security.protected()
+    def myroute(self, **kw):
+        response = super(ExtendMyController, self).myroute(kw)
+        ...
+        return response
 ```
 
 ## Helper
@@ -72,5 +72,25 @@ Take a look now at the available helper and decorators.
 
 ## Decorator - parse_exception
 
+```python
+    from odoo.addons.muk_rest import tools
+
+    @tools.common.parse_exception
+    def method(self, **kw):
+    	...
+```
+
 This decorator ensures that exceptions that occur during the execution of the method are
 parsed into a json response and a corresponding response is returned to the API client.
+
+## Decorator - ensure_database
+
+```python
+    from odoo.addons.muk_rest import tools
+
+    @tools.common.ensure_database
+    def method(self, **kw):
+    	...
+```
+
+This decorator can be used to ensure that the method is only executed when a database is selected.
