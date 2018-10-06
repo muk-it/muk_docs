@@ -70,27 +70,60 @@ class ExtendMyController(MyController):
 
 Take a look now at the available helper and decorators.
 
-## Decorator - parse_exception
+### Decorator - parse_exception
 
 ```python
-    from odoo.addons.muk_rest import tools
+from odoo.addons.muk_rest import tools
 
-    @tools.common.parse_exception
-    def method(self, **kw):
-    	...
+@tools.common.parse_exception
+def method(self, **kw):
+	...
 ```
 
 This decorator ensures that exceptions that occur during the execution of the method are
 parsed into a json response and a corresponding response is returned to the API client.
 
-## Decorator - ensure_database
+### Decorator - ensure_database
 
 ```python
-    from odoo.addons.muk_rest import tools
+from odoo.addons.muk_rest import tools
 
-    @tools.common.ensure_database
-    def method(self, **kw):
-    	...
+@tools.common.ensure_database
+def method(self, **kw):
+	...
 ```
 
 This decorator can be used to ensure that the method is only executed when a database is selected.
+
+### Decorator - ensure_module
+
+```python
+from odoo.addons.muk_rest import tools
+
+@tools.common.ensure_module(module='muk_rest', error=_("The Restful API is not supported by this database."))
+def method(self, **kw):
+	...
+```
+
+This decorator can be used to ensure that a module is installed before executing the method.
+
+### Decorator - protected
+
+```python
+from odoo.addons.muk_rest import tools
+
+@tools.common.protected(operations=['read'], check_custom_routes=False, *args, **kwargs):
+def method(self, **kw):
+	...
+```
+
+This decorator ensures that the corresponding method is allowed on the API client.
+
+### Helper - ResponseEncoder
+
+Json Encoder, which handles the seralization during the dump creation.
+
+
+### Helper - RecordEncoder
+
+Json Encoder, which handles the seralization during the dump creation and allows the duming of recrods. 
