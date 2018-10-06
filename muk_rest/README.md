@@ -59,7 +59,7 @@ console:
 When the process is finished, restart your server and update the
 application in Odoo, just like you would normally.
 
-# Configuration
+### Configuration
 
 In case the module should be active in every database just change the
 auto install flag to `True`. To activate the routes even if no database
@@ -69,7 +69,7 @@ parameter to the start script.
 
 Parameter: `--load=web,muk_rest`
 
-# Usage
+### Usage
 
 This module has no direct visible effect on the system. It provides a
 set of routes to interact with the system via HTTP requests.
