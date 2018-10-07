@@ -4,6 +4,13 @@ Enables a REST API for the Odoo server. The API has routes to
 authenticate and retrieve a token. Afterwards, a set of routes to
 interact with the server are provided.
 
+### Documentation
+
+* [Clients]
+* [Examples] 
+* [Documentation] 
+* [Framework]
+
 ### Installation
 
 To install this module, you need to:
@@ -82,6 +89,10 @@ This module provides a set of routes to interact with the system via
 HTTP requests. Take a look at the [clients] and [examples] or open the 
 [documentation] to get a detailed description of every available route.
 
+[Clients]: ./clients/clients.md
+[Examples]: ./examples/examples.md
+[Documentation]: https://app.swaggerhub.com/apis/keshrath/muk_rest/3.0.0
+[Framework]: ./framework/framework.md
 [Download]: https://apps.odoo.com/apps/modules/12.0/muk_rest/
 [clients]: https://github.com/muk-it/muk_docs/blob/12%2C0/muk_rest/clients/clients.md
 [examples]: https://github.com/muk-it/muk_docs/blob/12%2C0/muk_rest/examples/examples.md
