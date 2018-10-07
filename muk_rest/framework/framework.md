@@ -21,7 +21,7 @@ from odoo import http
 from odoo.http import request, Response
 
 from odoo.addons.muk_rest import tools
-from odoo.addons.muk_rest.tools.encode import ResponseEncoder        
+from odoo.addons.muk_utils.tools.json import ResponseEncoder        
                 
 class MyController(odoo.http.Controller):
 
@@ -49,7 +49,7 @@ from odoo import http
 from odoo.http import request, Response
 
 from odoo.addons.muk_rest import tools
-from odoo.addons.muk_rest.tools.encode import ResponseEncoder        
+from odoo.addons.muk_utils.tools.json import ResponseEncoder        
                 
 class ExtendMyController(MyController):
 
