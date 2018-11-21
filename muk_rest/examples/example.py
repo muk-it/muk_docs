@@ -8,9 +8,9 @@ from oauthlib.oauth2 import BackendApplicationClient
 
 class RestAPI:
     def __init__(self):
-        self.url = 'https://cyberlab.mukit.at'
-        self.client_id = 'nIawo2Me56v2NwOBWxmuWJ4TlVL6Nm'
-        self.client_secret = 'TdnQnumRrevNIVeXU0yhQiIBYzyglt'
+        self.url = '<server_url>'
+        self.client_id = '<client_id>'
+        self.client_secret = '<client_secret>'
         self.client = BackendApplicationClient(client_id=self.client_id)
         self.oauth = OAuth2Session(client=self.client)
 
