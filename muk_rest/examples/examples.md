@@ -25,7 +25,7 @@ oauth = OAuth2Session(
 token = oauth.fetch_token(
     token_url=token_url, 
     username=username, password=password,
-	client_id=client_id, client_secret=client_secret
+    client_id=client_id, client_secret=client_secret
 )
 
 print(oauth.get("https://demo12.mukit.at/api/user").json())
