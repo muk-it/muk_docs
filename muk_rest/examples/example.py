@@ -47,6 +47,17 @@ api.authenticate()
 pprint(api.execute('/api'))
 pprint(api.execute('/api/user'))
 
+# sampel query
+data = {
+    'model': "res.partner",
+    'domain': json.dumps([['parent_id.name', '=', "Azure Interior"]]),
+    'fields': json.dumps(['name', 'image_small']),
+}
+response = api.execute('/api/search_read', data=data)
+for entry in response:
+    entry['image_small'] = entry.get('image_small')[:5] + "..."
+pprint(response)
+
 # check customer
 data = {
     'model': "res.partner",
