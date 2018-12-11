@@ -13,15 +13,20 @@ from oauthlib.oauth2 import LegacyApplicationClient
 
 client_id = 'LegacyApplicationFlowDemoClientKey'
 client_secret = 'LegacyApplicationFlowDemoClientSecret'
-token_url = 'http://demo.mukit.at/api/authentication/oauth2/token'
+token_url = 'https://demo12.mukit.at/api/authentication/oauth2/token'
 
-username = 'admin'
-password = 'admin'
+username = 'demo'
+password = 'demo'
 scope = ['all']
 
-oauth = OAuth2Session(client=LegacyApplicationClient(client_id=client_id))
-oauth.fetch_token(token_url=token_url, username=username, password=password,
-	client_id=client_id, client_secret=client_secret)
+oauth = OAuth2Session(
+    client=LegacyApplicationClient(client_id=client_id)
+)
+token = oauth.fetch_token(
+    token_url=token_url, 
+    username=username, password=password,
+	client_id=client_id, client_secret=client_secret
+)
 
-print(oauth.get("http://localhost:8069/api/user").json())
+print(oauth.get("https://demo12.mukit.at/api/user").json())
 ```
