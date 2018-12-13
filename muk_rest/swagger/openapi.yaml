@@ -320,43 +320,58 @@ paths:
         - Authentication
       summary: OAuth2 - Token Credentials
       description: >-
-        Fetches the access token from the server. All headers must be passed via
-        the OAuth header. </br> The Web Application Flow is taken as an example.
-        </br> The API supports all 4 OAuth2 Grant Types.
+        OAuth Authentication as described by <a href='https://tools.ietf.org/html/rfc6749'>RFC6749</a>.
+        <br/>
+        Fetches the access token from the server. The values are passed by an authentication header. The following values must be provided to authorize a OAuth2 authentication. The Web Application Flow is taken as an example but the API supports all 4 OAuth2 Grant Types.
+        <br/>
+        <ul>
+          <li>
+            <strong>Scope (scope)</strong>
+            The scope argument is used to determine the corresponding access control. In case the OAuth setting was created with 'Basic Access Control' the value 'all' can be passed.
+          </li>
+          <li>
+            <strong>Client ID (client_id)</strong>
+            The key that was created in Odoo to authenticate the client
+          </li>
+          <li>
+            <strong>Client Secret (client_secret)</strong>
+            The secret that was created in Odoo to authenticate the client
+          </li>
+          <li>
+            <strong>Callback (redirect_uri)</strong>
+            An absolute URL to which the Server refers the user back when the authorization process is completed.
+          </li>
+          <li>
+            <strong>Code (code)</strong>
+            Authorization code the consumer must use to obtain the access and refresh tokens.
+          </li>
+          <li>
+            <strong>Grant Type (grant_type)</strong>
+            The grant type used for the authentication flow.
+          </li>
+        </ul>
+        <pre><code>POST /api/authentication/oauth1/token HTTP/1.1
+        
+        Host: server.example.com 
+        
+        Authorization: OAuth scope='Example'
+          client_id='uwCrAHAQbL7D9cvJLIztNaZ0bziEGMDh',
+          state='Y1Ux1iNPvn6KYQK5Lj84WJ9VJrQw1L',
+          redirect_uri='https://client.example.com/callback',
+          response_type='code'
+        </code></pre>
       parameters:
-        - name: client_id
-          description: Client ID
+        - name: Authorization
+          description: OAuth Authorization
           in: header
           required: true
-          example: uwCrAHAQbL7D9cvJLIztNaZ0bziEGMDh
-          schema:
-            type: string
-        - name: client_secret
-          description: Client Secret
-          in: header
-          required: true
-          example: FtHzOQVEs0aSEL9AXuIe9k7X6E2MekU7
-          schema:
-            type: string
-        - name: redirect_uri
-          description: Callback
-          in: header
-          required: true
-          example: 'https://127.0.0.1/callback'
-          schema:
-            type: string
-        - name: grant_type
-          description: Grant Type
-          in: header
-          required: true
-          example: authorization_code
-          schema:
-            type: string
-        - name: code
-          description: Code
-          in: header
-          required: true
-          example: dcee1806d2c50d0fb598
+          example: >-
+            OAuth scope='Example'
+            client_id='uwCrAHAQbL7D9cvJLIztNaZ0bziEGMDh',
+            client_secret='FtHzOQVEs0aSEL9AXuIe9k7X6E2MekU7',
+            redirect_uri='https%3A%2F%2F127.0.0.1%2Fcallback',
+            code='dcee1806d2c50d0fb598'
+            grant_type='authorization_code'
           schema:
             type: string
       responses:
