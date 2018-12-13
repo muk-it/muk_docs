@@ -528,6 +528,8 @@ paths:
                     type: string
                     description: Name
                     example: 'Max'
+        '401':
+          description: The server could not verify that you are authorized to access the requested URL.
       security:
         - OAuth2:
             - all
@@ -613,6 +615,8 @@ paths:
                     type: string
                     description: Zoneinfo
                     example: 'Europe/Brussels'
+        '401':
+          description: The server could not verify that you are authorized to access the requested URL.
       security:
         - OAuth2:
             - all          
@@ -695,6 +699,8 @@ paths:
                     type: string
                     description: Name
                     example: 'http://127.0.0.1:8069'
+        '401':
+          description: The server could not verify that you are authorized to access the requested URL.
       security:
         - OAuth2:
             - all
