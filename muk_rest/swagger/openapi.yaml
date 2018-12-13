@@ -545,15 +545,74 @@ paths:
               schema:
                 type: object
                 properties:
-                  uid:
-                    type: integer
-                    format: int32
-                    description: UID
-                    example: 3
+                  address:
+                    type: object
+                    properties:
+                      country:
+                        type: string
+                        description: Country
+                        example: 'United States'
+                      formatted:
+                        type: string
+                        description: Formatted
+                        example: 'YourCompany\n215 Vine St\n\nScranton PA 18503\nUnited States'
+                      locality:
+                        type: string
+                        description: Locality
+                        example: 'Scranton'
+                      postal_code:
+                        type: string
+                        description: Postal Code
+                        example: '18503'
+                      region:
+                        type: string
+                        description: Region
+                        example: 'Pennsylvania'
+                      street_address:
+                        type: string
+                        description: Street Address
+                        example: '215 Vine St'
+                  email:
+                    type: string
+                    description: Email
+                    example: 'admin@yourcompany.example.com'
+                  locale:
+                    type: string
+                    description: Locale
+                    example: 'en_US'
                   name:
                     type: string
                     description: Name
-                    example: 'Max'
+                    example: 'Mitchell Admin'
+                  phone_number:
+                    type: string
+                    description: Phone Number
+                    example: '+1 555-555-5555'
+                  picture:
+                    type: string
+                    description: Picture
+                    example: 'data:image/jpg;base64,/9j/4AA...'
+                  sub:
+                    type: integer
+                    format: int32
+                    description: SUB
+                    example: 3
+                  updated_at:
+                    type: string
+                    description: Updated
+                    example: '2018-12-13'
+                  username:
+                    type: string
+                    description: Username
+                    example: 'admin'
+                  website:
+                    type: string
+                    description: Website
+                    example: 'https://www.mukit.at'
+                  zoneinfo:
+                    type: string
+                    description: Zoneinfo
+                    example: 'Europe/Brussels'
       security:
         - OAuth2:
             - all          
