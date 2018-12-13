@@ -1,384 +1,433 @@
----
-openapi: 3.0.0
+openapi: '3.0.0'
+
 info:
-  title: MuK REST API for Odoo
-  description: Download the [REST API](https://www.odoo.com/apps/modules/12.0/muk_rest/) for [Odoo](https://www.odoo.com). </br> </br> Enables a REST API for the Odoo server. The API has routes to authenticate and retrieve a token. Afterwards, a set of routes to interact with the server are provided. The API can be used by any language or framework which can make an HTTP requests and receive responses with JSON payloads and works with both the Community and the Enterprise Edition.
+  description: >-
+    Download the [REST API](https://www.odoo.com/apps/modules/12.0/muk_rest/)
+    for [Odoo](https://www.odoo.com). </br> </br> Enables a REST API for the
+    Odoo server. The API has routes to authenticate and retrieve a token.
+    Afterwards, a set of routes to interact with the server are provided. The
+    API can be used by any language or framework which can make an HTTP requests
+    and receive responses with JSON payloads and works with both the Community
+    and the Enterprise Edition.<br/><br/>
+    Authentication: Mobile Application Flow<br/>
+    Client ID: MobileApplicationFlowDemoClientKey<br/>
+    User: demo<br/>
+    Password: demo<br/>
+  version: '3.0.0'
+  title: 'MuK REST API for Odoo'
   contact:
-    name: MuK IT
-    url: https://www.mukit.at
-    email: support@mukit.at
+    name: 'MuK IT'
+    email: 'support@mukit.at'
+    url: 'https://www.mukit.at'
   license:
-    name: Odoo Proprietary License v1.0
-    url: https://www.odoo.com/documentation/user/12.0/legal/licenses/licenses.html#licenses
-  version: 3.0.0
+    name: 'Odoo Proprietary License v1.0'
+    url: 'https://www.odoo.com/documentation/user/12.0/legal/licenses/licenses.html#licenses'
 externalDocs:
-  description: Clients and Examples
-  url: https://github.com/muk-it/muk_docs/tree/12%2C0/muk_rest
-servers:
-- url: https://virtserver.swaggerhub.com/keshrath/muk_rest/3.0.0
-  description: Virtual server (uses sample data)
-- url: https://demo.mukit.at
-  description: Demo server (uses demo data)
+  description: 'Clients and Examples'
+  url: 'https://github.com/muk-it/muk_docs/tree/12%2C0/muk_rest'
+  
 tags:
-- name: Authentication
-- name: System
-- name: Model
-- name: Security
-- name: Database
+  - name: Authentication 
+  - name: System
+  - name: Model
+  - name: Security
+  - name: Database
+    
+servers:
+  - url: 'https://demo12.mukit.at'
+    description: Demo server (uses demo data)
+    
+components:
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: OAuth2 Authentication
+      flows:
+        implicit:
+          authorizationUrl: 'https://demo12.mukit.at/api/authentication/oauth2/authorize'
+          refreshUrl: 'https://demo12.mukit.at/api/authentication/oauth2/token'
+          scopes:
+            all: Basic security settings without additional restrictions
+
 paths:
   /api/authentication/oauth1/initiate:
     post:
       tags:
-      - Authentication
+        - Authentication
       summary: OAuth1 - Temporary Credentials Acquisition
-      description: Request system information. All headers must be passed via the OAuth header.
+      description: >-
+        OAuth Authentication as described by <a href='https://tools.ietf.org/html/rfc5849'>RFC5849</a>.
+        <br/>
+        The first step to authorization is acquiring temporary credentials. The values are passed by an authentication header. The following values must be provided to initiate a OAuth1 authentication:
+        <br/>
+        <ul>
+          <li>
+            <strong>Realm (realm)</strong>
+            The realm argument is used to determine the corresponding access control. In case the OAuth setting was created with 'Basic Access Control' the value 'all' can be passed.
+          </li>
+          <li>
+            <strong>Consumer Key (oauth_consumer_key)</strong>
+            The key that was created in Odoo to authenticate the client
+          </li>
+          <li>
+            <strong>Signature Method (oauth_signature_method)</strong> 
+            The signature method used by the consumer to sign the request.
+          </li>
+          <li>
+            <strong>Callback (oauth_callback)</strong>
+            An absolute URL to which the Server refers the user back when the authorization process is completed.
+          </li>
+          <li>
+            <strong>Nonce (oauth_nonce)</strong> 
+            A randomly selected value provided by the application which is unique to each authorization request.
+          </li>
+          <li><strong>Timestamp (oauth_timestamp)</strong> The timestamp value must be a positive integer and must be equal to or greater than the timestamp used in previous queries.</li>
+          <li><strong>Signature (oauth_signature)</strong> Base64-encoded HMAC-SHA256 signature signed with the client's private key containing all components of the OAuth request.</li>
+          <li><strong>Version (oauth_version)</strong> The authentication version is optional, but if specified it must be '1.0'.</li>
+        </ul>
+        <pre><code>POST /api/authentication/oauth1/initiate HTTP/1.1
+        
+        Host: server.example.com 
+        
+        Authorization: OAuth realm="Example",
+          oauth_consumer_key="OAuthDemoClientKey",
+          oauth_signature_method="HMAC-SHA1",
+          oauth_timestamp="3453457951239012903812903",
+          oauth_nonce="7d8f3e4a",
+          oauth_callback="https://client.example.com/callback",
+          oauth_signature="KbLt0XDSAVjljXhMJHmmpWxHkFnfs",
+          oauth_version='1.0'
+        </code></pre>
       parameters:
-      - name: realm
-        in: header
-        description: Realm
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: Example
-      - name: oauth_consumer_key
-        in: header
-        description: Consumer Key
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: ac4c9d93ea8e48b78fe0fd470680b09d
-      - name: oauth_nonce
-        in: header
-        description: Nonce
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: "71257790252100875101500704380"
-      - name: oauth_callback
-        in: header
-        description: Callback
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: https://127.0.0.1/callback
-      - name: oauth_signature_method
-        in: header
-        description: Signature Method
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: HMAC-SHA1
-      - name: oauth_timestamp
-        in: header
-        description: Timestamp
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: "1500704388"
-      - name: oauth_signature
-        in: header
-        description: Signature
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: KbLt0XDVjljXhMJHmmpWxHkFnfs
-      - name: oauth_version
-        in: header
-        description: Version
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: "1.0"
+        - name: Authorization
+          description: OAuth Authorization
+          in: header
+          required: true
+          example: >-
+            OAuth realm="Example",
+            oauth_consumer_key="OAuthDemoClientKey",
+            oauth_signature_method="HMAC-SHA1",
+            oauth_timestamp="3453457951239012903812903",
+            oauth_nonce="7d8f3e4a",
+            oauth_callback="https%3A%2F%2F127.0.0.1%2Fcallback",
+            oauth_signature="KbLt0XDSAVjljXhMJHmmpWxHkFnfs",
+            oauth_version='1.0'
+          schema:
+            type: string
       responses:
-        200:
+        '200':
           description: Temporary Credentials
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200'
+                type: object
+                properties:
+                  type:
+                    type: string
+                  color:
+                    type: string
+                example:
+                  oauth_token: mXYKtuv8k3NJfnpLMpU3KFuEijXx2Aat
+                  oauth_token_secret: QAlvAmzyULWeitpe24oNhj3n91los7W5
   /api/authentication/oauth1/authorize:
     get:
       tags:
-      - Authentication
+        - Authentication
       summary: OAuth1 - Authorization
-      description: Authenticates the user with the Odoo server.
+      description: >-
+        OAuth Authentication as described by <a href='https://tools.ietf.org/html/rfc5849'>RFC5849</a>.
+        <br/>
+        Allows the user to enter the credentials to authenticate with the Odoo server.
       parameters:
-      - name: oauth_token
-        in: query
-        description: Token
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: mXYKtuv8k3NJfnpLMpU3KFuEijXx2Aat
+        - name: oauth_token
+          description: Token
+          in: query
+          required: true
+          example: mXYKtuv8k3NJfnpLMpU3KFuEijXx2Aat
+          schema:
+            type: string
       responses:
-        200:
+        '200':
           description: Verifier
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_1'
+                type: object
+                properties:
+                  type:
+                    type: string
+                  color:
+                    type: string
+                example:
+                  oauth_token: mXYKtuv8k3NJfnpLMpU3KFuEijXx2Aat
+                  oauth_verifier: sdflk3450FASDLJasd2349dfs
   /api/authentication/oauth1/token:
     post:
       tags:
-      - Authentication
+        - Authentication
       summary: OAuth1 - Token Exchange
-      description: Exchange temporary credentials with the access token. All headers must be passed via the OAuth header.
+      description: >-
+        OAuth Authentication as described by <a href='https://tools.ietf.org/html/rfc5849'>RFC5849</a>.
+        <br/>
+        Exchange the temporary credentials with the access token. The values are passed by an authentication header. The following values must be provided to initiate a OAuth1 authentication:
+        <br/>
+        <ul>
+          <li>
+            <strong>Realm (realm)</strong>
+            The realm argument is used to determine the corresponding access control. In case the OAuth setting was created with 'Basic Access Control' the value 'all' can be passed.
+          </li>
+          <li>
+            <strong>Consumer Key (oauth_consumer_key)</strong>
+            The key that was created in Odoo to authenticate the client
+          </li>
+          <li>
+            <strong>Request Token (oauth_token)</strong>
+            The Request Token obtained by the inital request.
+          </li>
+          <li>
+            <strong>Verifier (oauth_verifier)</strong> 
+            The verification code received from the Server.
+          </li>
+          <li>
+            <strong>Signature Method (oauth_signature_method)</strong> 
+            The signature method used by the consumer to sign the request.
+          </li>
+          <li>
+            <strong>Nonce (oauth_nonce)</strong> 
+            A randomly selected value provided by the application which is unique to each authorization request.
+          </li>
+          <li><strong>Timestamp (oauth_timestamp)</strong> The timestamp value must be a positive integer and must be equal to or greater than the timestamp used in previous queries.</li>
+          <li><strong>Signature (oauth_signature)</strong> Base64-encoded HMAC-SHA256 signature signed with the client's private key containing all components of the OAuth request.</li>
+          <li><strong>Version (oauth_version)</strong> The authentication version is optional, but if specified it must be '1.0'.</li>
+        </ul>
+        <pre><code>POST /api/authentication/oauth1/token HTTP/1.1
+        
+        Host: server.example.com 
+        
+        Authorization: OAuth realm="Example",
+         oauth_consumer_key='OAuthDemoClientKey',
+         oauth_token='mXYKtuv8k3NASDWE34121KFuEijXx2Aat',
+         oauth_nonce='345345345345345435345345345345345',
+         oauth_signature_method='HMAC-SHA1',
+         oauth_timestamp='1500777189',
+         oauth_verifier='sdflk3450FAasdDSG349dfs',
+         oauth_signature='KbLt0XDVqwejXhMJHmmpWxHTDFASDF',
+         oauth_version='1.0'
+        </code></pre>
       parameters:
-      - name: realm
-        in: header
-        description: Realm
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: Example
-      - name: oauth_consumer_key
-        in: header
-        description: Consumer Key
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: ac4c9d93ea8e48b78fe0fd470680b09d
-      - name: oauth_nonce
-        in: header
-        description: Nonce
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: "156754554473268986001500738176"
-      - name: oauth_timestamp
-        in: header
-        description: Timestamp
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: "123456789"
-      - name: oauth_token
-        in: header
-        description: Token
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: mXYKtuv8k3NJfnpLMpU3KFuEijXx2Aat
-      - name: oauth_signature_method
-        in: header
-        description: Signature Method
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: oauth_signature_method
-      - name: oauth_verifier
-        in: header
-        description: Verifier
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: sdflk3450FASDLJasd2349dfs
-      - name: oauth_signature
-        in: header
-        description: Signature
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: KbLt0XDVjljXhMJHmmpWxHkFnfs
+        - name: Authorization
+          description: OAuth Authorization
+          in: header
+          required: true
+          example: >-
+            oauth_consumer_key="OAuthDemoClientKey",
+            oauth_token="mXYKtuv8k3NASDWE34121KFuEijXx2Aat",
+            oauth_signature_method="HMAC-SHA1",
+            oauth_timestamp="1500777189",
+            oauth_nonce="345345345345345435345345345345345",
+            oauth_verifier="sdflk3450FAasdDSG349dfs",
+            oauth_signature="KbLt0XDSAVjljXhMJHmmpWxHkFnfs",
+            oauth_version='1.0'
+          schema:
+            type: string
       responses:
-        200:
+        '200':
           description: Access Token
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_2'
+                type: object
+                properties:
+                  type:
+                    type: string
+                  color:
+                    type: string
+                example:
+                  oauth_token: RF7gImCv0B58eogLiPmOmNPizZEVVUWP
+                  oauth_token_secret: oxBUTIjTl8gfbxEv2jpXo5rRtQ16u3Lg
   /api/authentication/oauth2/authorize:
     get:
       tags:
-      - Authentication
+        - Authentication
       summary: OAuth2 - Authorization
-      description: Authenticates the user with the Odoo server. All headers must be passed via the OAuth header. </br> The Web Application Flow is taken as an example. </br> The API supports all 4 OAuth2 Grant Types.
+      description: >-
+        Authenticates the user with the Odoo server. All headers must be passed
+        via the OAuth header. </br> 
+        The Web Application Flow is taken as an example. </br>
+        The API supports all 4 OAuth2 Grant Types.
       parameters:
-      - name: client_id
-        in: header
-        description: Client ID
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: uwCrAHAQbL7D9cvJLIztNaZ0bziEGMDh
-      - name: state
-        in: header
-        description: State
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: Y1Ux1iNPvn6KYQK5Lj84WJ9VJrQw1L
-      - name: redirect_uri
-        in: header
-        description: Callback
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: https://127.0.0.1/callback
-      - name: response_type
-        in: header
-        description: Response Type
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: code
+        - name: client_id
+          description: Client ID
+          in: header
+          required: true
+          example: uwCrAHAQbL7D9cvJLIztNaZ0bziEGMDh
+          schema:
+            type: string
+        - name: state
+          description: State
+          in: header
+          required: true
+          example: Y1Ux1iNPvn6KYQK5Lj84WJ9VJrQw1L
+          schema:
+            type: string
+        - name: redirect_uri
+          description: Callback
+          in: header
+          required: true
+          example: 'https://127.0.0.1/callback'
+          schema:
+            type: string
+        - name: response_type
+          description: Response Type
+          in: header
+          required: true
+          example: code
+          schema:
+            type: string
       responses:
-        200:
+        '200':
           description: Authorization Code
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_3'
+                type: object
+                properties:
+                  type:
+                    type: string
+                  color:
+                    type: string
+                example:
+                  code: dcee1806d2c50d0fb598
+                  state: Y1Ux1iNPvn6KYQK5Lj84WJ9VJrQw1L
   /api/authentication/oauth2/token:
     post:
       tags:
-      - Authentication
+        - Authentication
       summary: OAuth2 - Token Credentials
-      description: Fetches the access token from the server. All headers must be passed via the OAuth header. </br> The Web Application Flow is taken as an example. </br> The API supports all 4 OAuth2 Grant Types.
+      description: >-
+        Fetches the access token from the server. All headers must be passed via
+        the OAuth header. </br> The Web Application Flow is taken as an example.
+        </br> The API supports all 4 OAuth2 Grant Types.
       parameters:
-      - name: client_id
-        in: header
-        description: Client ID
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: uwCrAHAQbL7D9cvJLIztNaZ0bziEGMDh
-      - name: client_secret
-        in: header
-        description: Client Secret
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: FtHzOQVEs0aSEL9AXuIe9k7X6E2MekU7
-      - name: redirect_uri
-        in: header
-        description: Callback
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: https://127.0.0.1/callback
-      - name: grant_type
-        in: header
-        description: Grant Type
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: authorization_code
-      - name: code
-        in: header
-        description: Code
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: dcee1806d2c50d0fb598
+        - name: client_id
+          description: Client ID
+          in: header
+          required: true
+          example: uwCrAHAQbL7D9cvJLIztNaZ0bziEGMDh
+          schema:
+            type: string
+        - name: client_secret
+          description: Client Secret
+          in: header
+          required: true
+          example: FtHzOQVEs0aSEL9AXuIe9k7X6E2MekU7
+          schema:
+            type: string
+        - name: redirect_uri
+          description: Callback
+          in: header
+          required: true
+          example: 'https://127.0.0.1/callback'
+          schema:
+            type: string
+        - name: grant_type
+          description: Grant Type
+          in: header
+          required: true
+          example: authorization_code
+          schema:
+            type: string
+        - name: code
+          description: Code
+          in: header
+          required: true
+          example: dcee1806d2c50d0fb598
+          schema:
+            type: string
       responses:
-        200:
+        '200':
           description: Authorization Code
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_4'
+                type: object
+                properties:
+                  type:
+                    type: string
+                  color:
+                    type: string
+                example:
+                  access_token: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIn
+                  token_type: bearer
+                  expires_in: '7/20/2017 12:00:05'
+                  refresh_token: ZXIiLCJnaXZlbl9uYW1lIjoiRnJhbmsifQ
   /api/authentication/oauth2/revoke:
     post:
       tags:
-      - Authentication
+        - Authentication
       summary: OAuth2 - Revoke Token
       description: Revokes the access token.
       parameters:
-      - name: client_id
-        in: query
-        description: Client ID
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: uwCrAHAQbL7D9cvJLIztNaZ0bziEGMDh
-      - name: token
-        in: query
-        description: Access Token
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: dcee1806d2c50d0fb598
+        - name: client_id
+          description: Client ID
+          in: query
+          required: true
+          example: uwCrAHAQbL7D9cvJLIztNaZ0bziEGMDh
+          schema:
+            type: string
+        - name: token
+          description: Access Token
+          in: query
+          required: true
+          example: dcee1806d2c50d0fb598
+          schema:
+            type: string
       responses:
-        200:
+        '200':
           description: Token successfully revoked
   /api:
     get:
       tags:
-      - System
+        - System
       summary: Version
       description: Request system information.
       responses:
-        200:
+        '200':
           description: System information
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_5'
+                type: object
+                properties:
+                  api_version:
+                    type: integer
+                    format: int32
+                    description: Version
+                    example: '3'
+                  server_serie:
+                    type: string
+                    description: Server Serie
+                    example: '12.0'
+                  server_version:
+                    type: string
+                    description: Server Version
+                    example: 12.0-20180122
+                  server_version_info:
+                    type: array
+                    description: Info
+                    items:
+                      oneOf:
+                        - type: string
+                        - type: integer
+                    example: [12, 0, 0, "final",  0, ""]
   /api/countries:
     get:
       tags:
-      - System
+        - System
       summary: Countries
       description: List of available countries.
       responses:
-        200:
+        '200':
           description: List of countries
           content:
             application/json:
@@ -389,23 +438,15 @@ paths:
                   description: Tuple
                   items:
                     type: string
-              example:
-              - - af
-                - Afghanistan
-              - - al
-                - Albania
-              - - dz
-                - Algeria
-              - - '...'
-                - '...'
+              example: [['af', 'Afghanistan'], ['al', 'Albania'], ['dz', 'Algeria'], ['...', '...']]
   /api/languages:
     get:
       tags:
-      - System
+        - System
       summary: Languages
       description: List of available languages.
       responses:
-        200:
+        '200':
           description: List of languages
           content:
             application/json:
@@ -416,3321 +457,2942 @@ paths:
                   description: Tuple
                   items:
                     type: string
-              example:
-              - - sq_AL
-                - Albanian
-              - - am_ET
-                - Amharic
-              - - '...'
-                - '...'
+              example: [['sq_AL', 'Albanian'], ['am_ET', 'Amharic'], ['...', '...']]
   /api/modules:
     get:
       tags:
-      - System
+        - System
       summary: Modules
       description: List of available modules.
       responses:
-        200:
+        '200':
           description: List of modules
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  type: string
                   description: Tuple
-              example:
-              - base
-              - web
-              - base_import
-              - web_settings_dashboard
-              - iap
-              - web_tour
+                  type: string
+              example: ['base', 'web', 'base_import', 'web_settings_dashboard', 'iap', '...']
   /api/user:
     get:
       tags:
-      - System
+        - System
       summary: User
       description: User information.
       responses:
-        200:
+        '200':
           description: User
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_6'
+                type: object
+                properties:
+                  uid:
+                    type: integer
+                    format: int32
+                    description: UID
+                    example: 3
+                  name:
+                    type: string
+                    description: Name
+                    example: 'Max'
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
+  /api/userinfo:
+    get:
+      tags:
+        - System
+      summary: User
+      description: User information.
+      responses:
+        '200':
+          description: User
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uid:
+                    type: integer
+                    format: int32
+                    description: UID
+                    example: 3
+                  name:
+                    type: string
+                    description: Name
+                    example: 'Max'
+      security:
+        - OAuth2:
+            - all          
   /api/session:
     get:
       tags:
-      - System
+        - System
       summary: Session
       description: Session information.
       responses:
-        200:
+        '200':
           description: Session
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_7'
+                type: object
+                properties:
+                  companies: 
+                    type: boolean
+                    description: Companies flag
+                    example: false
+                  company_id: 
+                    type: integer
+                    format: int32
+                    description: Company
+                    example: 1
+                  context:
+                    type: object
+                    properties:
+                      lang:
+                        type: string
+                        description: Language
+                        example: 'en_US'
+                      tz: 
+                        type: string
+                        description: Timezone
+                        example: 'Europe/Brussels'
+                      uid: 
+                        type: integer
+                        format: int32
+                        description: UID
+                        example: 3
+                  currencies:
+                    example: {'1': {'digits': [69, 2], 'position': 'after', 'symbol': '€'}}
+                  db: 
+                    type: string
+                    description: Name
+                    example: 'demo'
+                  display_name:
+                    type: string
+                    description: Name
+                    example: 'YourCompany, Mitchell Admin'
+                  is_admin: 
+                    type: boolean
+                    description: Companies flag
+                    example: false
+                  is_system: 
+                    type: boolean
+                    description: Companies flag
+                    example: false
+                  login: 
+                    type: string
+                    description: Name
+                    example: 'demo'
+                  name: 
+                    type: string
+                    description: Name
+                    example: 'Mitchell Admin'
+                  partner_id: 
+                      type: integer
+                      format: int32
+                      description: UID
+                      example: 4
+                  uid: 
+                      type: integer
+                      format: int32
+                      description: UID
+                      example: 3
+                  web.base.url: 
+                    type: string
+                    description: Name
+                    example: 'http://127.0.0.1:8069'
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/call/{model}:
     post:
       tags:
-      - System
+        - System
       summary: Call
       description: Generic method call.
       parameters:
-      - name: model
-        in: path
-        description: Model in the environment
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: res.partner
-      - name: method
-        in: query
-        description: Method to call
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: copy
-      - name: ids
-        in: query
-        description: IDs
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: '[2]'
-      - name: context
-        in: query
-        description: Context
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: '{"bin_size": "True"}'
-      - name: args
-        in: query
-        description: Arguments
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: kwargs
-        in: query
-        description: Arguments
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
+        - name: model
+          description: Model in the environment
+          in: path
+          required: true
+          example: res.partner
+          schema:
+            type: string
+        - name: method
+          description: Method to call
+          in: query
+          required: true
+          example: copy
+          schema:
+            type: string
+        - name: ids
+          description: IDs
+          in: query
+          required: false
+          example: '[2]'
+          schema:
+            type: string
+        - name: context
+          description: Context
+          in: query
+          required: false
+          schema:
+            type: string
+          example: '{"bin_size": "True"}'
+        - name: args
+          description: Arguments
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: kwargs
+          description: Arguments
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
-        200:
-          description: Result
+        '200':
+            description: Result
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/call/{model}/{method}:
     post:
       tags:
-      - System
+        - System
       summary: Call
       description: Generic method call.
       parameters:
-      - name: model
-        in: path
-        description: Model in the environment
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: res.partner
-      - name: method
-        in: path
-        description: Method to call
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: copy
-      - name: ids
-        in: query
-        description: IDs
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: '[2]'
-      - name: context
-        in: query
-        description: Context
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: '{"bin_size": "True"}'
-      - name: args
-        in: query
-        description: Arguments
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: kwargs
-        in: query
-        description: Arguments
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
+        - name: model
+          description: Model in the environment
+          in: path
+          required: true
+          example: res.partner
+          schema:
+            type: string
+        - name: method
+          description: Method to call
+          in: path
+          required: true
+          example: copy
+          schema:
+            type: string
+        - name: ids
+          description: IDs
+          in: query
+          required: false
+          example: '[2]'
+          schema:
+            type: string
+        - name: context
+          description: Context
+          in: query
+          required: false
+          schema:
+            type: string
+          example: '{"bin_size": "True"}'
+        - name: args
+          description: Arguments
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: kwargs
+          description: Arguments
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
-        200:
-          description: Result
+        '200':
+            description: Result     
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all   
   /api/binary/{xmlid}:
     get:
       tags:
-      - System
+        - System
       summary: Binary
       description: Download binary content.
       parameters:
-      - name: xmlid
-        in: path
-        description: XML-ID
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: 383-d1f5999
-      - name: model
-        in: query
-        description: Model
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: ir.attachment
-      - name: id
-        in: query
-        description: ID
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: integer
-          format: int32
-        example: 1
-      - name: field
-        in: query
-        description: Field
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: datas
-      - name: unique
-        in: query
-        description: Unique flag
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: boolean
-      - name: filename
-        in: query
-        description: Filename
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: filename.png
-      - name: filename_field
-        in: query
-        description: Filename Field
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: datas_fname
-      - name: mimetype
-        in: query
-        description: Mimetype
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: image/png
-      - name: access_token
-        in: query
-        description: Access Token
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: ASD21KSJADKAJI
-      - name: related_id
-        in: query
-        description: Related ID
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: integer
-          format: int32
-        example: 1
-      - name: access_mode
-        in: query
-        description: Access Mode
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: boolean
+        - name: xmlid
+          description: XML-ID
+          in: path
+          required: true
+          example: 383-d1f5999
+          schema:
+            type: string
+        - name: model
+          description: Model
+          in: query
+          required: false
+          example: ir.attachment
+          schema:
+            type: string
+        - name: id
+          description: ID
+          in: query
+          required: false
+          example: 1
+          schema:
+            type: integer
+            format: int32
+        - name: field
+          description: Field
+          in: query
+          required: false
+          example: datas
+          schema:
+            type: string
+        - name: unique
+          description: Unique flag
+          in: query
+          required: false
+          example: false
+          schema:
+            type: boolean
+        - name: filename
+          description: Filename
+          in: query
+          required: false
+          example: filename.png
+          schema:
+            type: string
+        - name: filename_field
+          description: Filename Field
+          in: query
+          required: false
+          example: datas_fname
+          schema:
+            type: string
+        - name: mimetype
+          description: Mimetype
+          in: query
+          required: false
+          example: image/png
+          schema:
+            type: string
+        - name: access_token
+          description: Access Token
+          in: query
+          required: false
+          example: ASD21KSJADKAJI
+          schema:
+            type: string
+        - name: related_id
+          description: Related ID
+          in: query
+          required: false
+          example: 1
+          schema:
+            type: integer
+            format: int32
+        - name: access_mode
+          description: Access Mode
+          in: query
+          required: false
+          example: false
+          schema:
+            type: boolean
+        - name: file_response
+          description: Response Format
+          in: query
+          required: false
+          example: false
+          schema:
+            type: boolean
       responses:
-        200:
+        '200':
           description: Content
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_8'
+                type: object
+                properties:
+                  content: 
+                    type: string
+                    description: Base64-Content
+                    example: ZGF0YSB0byBiZSBlbmNvZGVk
+                  content_disposition: 
+                    type: string
+                    description: Content-Disposition
+                    example: attachment; filename*=UTF-8''Image.png
+                  content_type: 
+                    type: string
+                    description: Content-Type
+                    example: image/png
+                  content_length: 
+                    type: integer
+                    format: int32
+                    description: Content-Length
+                    example: 10
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all   
   /api/binary/{xmlid}/{filename}:
     get:
       tags:
-      - System
+        - System
       summary: Binary
       description: Download binary content.
       parameters:
-      - name: xmlid
-        in: path
-        description: XML-ID
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: 383-d1f5999
-      - name: model
-        in: query
-        description: Model
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: ir.attachment
-      - name: id
-        in: query
-        description: ID
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: integer
-          format: int32
-        example: 1
-      - name: field
-        in: query
-        description: Field
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: datas
-      - name: unique
-        in: query
-        description: Unique flag
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: boolean
-      - name: filename
-        in: path
-        description: Filename
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: filename.png
-      - name: filename_field
-        in: query
-        description: Filename Field
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: datas_fname
-      - name: mimetype
-        in: query
-        description: Mimetype
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: image/png
-      - name: access_token
-        in: query
-        description: Access Token
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: ASD21KSJADKAJI
-      - name: related_id
-        in: query
-        description: Related ID
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: integer
-          format: int32
-        example: 1
-      - name: access_mode
-        in: query
-        description: Access Mode
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: boolean
+        - name: xmlid
+          description: XML-ID
+          in: path
+          required: true
+          example: 383-d1f5999
+          schema:
+            type: string
+        - name: model
+          description: Model
+          in: query
+          required: false
+          example: ir.attachment
+          schema:
+            type: string
+        - name: id
+          description: ID
+          in: query
+          required: false
+          example: 1
+          schema:
+            type: integer
+            format: int32
+        - name: field
+          description: Field
+          in: query
+          required: false
+          example: datas
+          schema:
+            type: string
+        - name: unique
+          description: Unique flag
+          in: query
+          required: false
+          example: false
+          schema:
+            type: boolean
+        - name: filename
+          description: Filename
+          in: path
+          required: true
+          example: filename.png
+          schema:
+            type: string
+        - name: filename_field
+          description: Filename Field
+          in: query
+          required: false
+          example: datas_fname
+          schema:
+            type: string
+        - name: mimetype
+          description: Mimetype
+          in: query
+          required: false
+          example: image/png
+          schema:
+            type: string
+        - name: access_token
+          description: Access Token
+          in: query
+          required: false
+          example: ASD21KSJADKAJI
+          schema:
+            type: string
+        - name: related_id
+          description: Related ID
+          in: query
+          required: false
+          example: 1
+          schema:
+            type: integer
+            format: int32
+        - name: access_mode
+          description: Access Mode
+          in: query
+          required: false
+          example: false
+          schema:
+            type: boolean
+        - name: file_response
+          description: Response Format
+          in: query
+          required: false
+          example: false
+          schema:
+            type: boolean
       responses:
-        200:
+        '200':
           description: Content
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_8'
+                type: object
+                properties:
+                  content: 
+                    type: string
+                    description: Base64-Content
+                    example: ZGF0YSB0byBiZSBlbmNvZGVk
+                  content_disposition: 
+                    type: string
+                    description: Content-Disposition
+                    example: attachment; filename*=UTF-8''Image.png
+                  content_type: 
+                    type: string
+                    description: Content-Type
+                    example: image/png
+                  content_length: 
+                    type: integer
+                    format: int32
+                    description: Content-Length
+                    example: 10
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all   
   /api/binary/{id}:
     get:
       tags:
-      - System
+        - System
       summary: Binary
       description: Download binary content.
       parameters:
-      - name: xmlid
-        in: query
-        description: XML-ID
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: 383-d1f5999
-      - name: model
-        in: query
-        description: Model
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: ir.attachment
-      - name: id
-        in: path
-        description: ID
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: integer
-          format: int32
-        example: 1
-      - name: field
-        in: query
-        description: Field
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: datas
-      - name: unique
-        in: query
-        description: Unique flag
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: boolean
-      - name: filename
-        in: query
-        description: Filename
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: filename.png
-      - name: filename_field
-        in: query
-        description: Filename Field
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: datas_fname
-      - name: mimetype
-        in: query
-        description: Mimetype
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: image/png
-      - name: access_token
-        in: query
-        description: Access Token
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: ASD21KSJADKAJI
-      - name: related_id
-        in: query
-        description: Related ID
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: integer
-          format: int32
-        example: 1
-      - name: access_mode
-        in: query
-        description: Access Mode
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: boolean
+        - name: xmlid
+          description: XML-ID
+          in: query
+          required: false
+          example: 383-d1f5999
+          schema:
+            type: string
+        - name: model
+          description: Model
+          in: query
+          required: false
+          example: ir.attachment
+          schema:
+            type: string
+        - name: id
+          description: ID
+          in: path
+          required: true
+          example: 1
+          schema:
+            type: integer
+            format: int32
+        - name: field
+          description: Field
+          in: query
+          required: false
+          example: datas
+          schema:
+            type: string
+        - name: unique
+          description: Unique flag
+          in: query
+          required: false
+          example: false
+          schema:
+            type: boolean
+        - name: filename
+          description: Filename
+          in: query
+          required: false
+          example: filename.png
+          schema:
+            type: string
+        - name: filename_field
+          description: Filename Field
+          in: query
+          required: false
+          example: datas_fname
+          schema:
+            type: string
+        - name: mimetype
+          description: Mimetype
+          in: query
+          required: false
+          example: image/png
+          schema:
+            type: string
+        - name: access_token
+          description: Access Token
+          in: query
+          required: false
+          example: ASD21KSJADKAJI
+          schema:
+            type: string
+        - name: related_id
+          description: Related ID
+          in: query
+          required: false
+          example: 1
+          schema:
+            type: integer
+            format: int32
+        - name: access_mode
+          description: Access Mode
+          in: query
+          required: false
+          example: false
+          schema:
+            type: boolean
+        - name: file_response
+          description: Response Format
+          in: query
+          required: false
+          example: false
+          schema:
+            type: boolean
       responses:
-        200:
+        '200':
           description: Content
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_8'
+                type: object
+                properties:
+                  content: 
+                    type: string
+                    description: Base64-Content
+                    example: ZGF0YSB0byBiZSBlbmNvZGVk
+                  content_disposition: 
+                    type: string
+                    description: Content-Disposition
+                    example: attachment; filename*=UTF-8''Image.png
+                  content_type: 
+                    type: string
+                    description: Content-Type
+                    example: image/png
+                  content_length: 
+                    type: integer
+                    format: int32
+                    description: Content-Length
+                    example: 10
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all   
   /api/binary/{id}/{filename}:
     get:
       tags:
-      - System
+        - System
       summary: Binary
       description: Download binary content.
       parameters:
-      - name: xmlid
-        in: query
-        description: XML-ID
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: 383-d1f5999
-      - name: model
-        in: query
-        description: Model
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: ir.attachment
-      - name: id
-        in: path
-        description: ID
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: integer
-          format: int32
-        example: 1
-      - name: field
-        in: query
-        description: Field
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: datas
-      - name: unique
-        in: query
-        description: Unique flag
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: boolean
-      - name: filename
-        in: path
-        description: Filename
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: filename.png
-      - name: filename_field
-        in: query
-        description: Filename Field
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: datas_fname
-      - name: mimetype
-        in: query
-        description: Mimetype
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: image/png
-      - name: access_token
-        in: query
-        description: Access Token
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: ASD21KSJADKAJI
-      - name: related_id
-        in: query
-        description: Related ID
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: integer
-          format: int32
-        example: 1
-      - name: access_mode
-        in: query
-        description: Access Mode
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: boolean
+        - name: xmlid
+          description: XML-ID
+          in: query
+          required: false
+          example: 383-d1f5999
+          schema:
+            type: string
+        - name: model
+          description: Model
+          in: query
+          required: false
+          example: ir.attachment
+          schema:
+            type: string
+        - name: id
+          description: ID
+          in: path
+          required: true
+          example: 1
+          schema:
+            type: integer
+            format: int32
+        - name: field
+          description: Field
+          in: query
+          required: false
+          example: datas
+          schema:
+            type: string
+        - name: unique
+          description: Unique flag
+          in: query
+          required: false
+          example: false
+          schema:
+            type: boolean
+        - name: filename
+          description: Filename
+          in: path
+          required: true
+          example: filename.png
+          schema:
+            type: string
+        - name: filename_field
+          description: Filename Field
+          in: query
+          required: false
+          example: datas_fname
+          schema:
+            type: string
+        - name: mimetype
+          description: Mimetype
+          in: query
+          required: false
+          example: image/png
+          schema:
+            type: string
+        - name: access_token
+          description: Access Token
+          in: query
+          required: false
+          example: ASD21KSJADKAJI
+          schema:
+            type: string
+        - name: related_id
+          description: Related ID
+          in: query
+          required: false
+          example: 1
+          schema:
+            type: integer
+            format: int32
+        - name: access_mode
+          description: Access Mode
+          in: query
+          required: false
+          example: false
+          schema:
+            type: boolean
       responses:
-        200:
+        '200':
           description: Content
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_8'
+                type: object
+                properties:
+                  content: 
+                    type: string
+                    description: Base64-Content
+                    example: ZGF0YSB0byBiZSBlbmNvZGVk
+                  content_disposition: 
+                    type: string
+                    description: Content-Disposition
+                    example: attachment; filename*=UTF-8''Image.png
+                  content_type: 
+                    type: string
+                    description: Content-Type
+                    example: image/png
+                  content_length: 
+                    type: integer
+                    format: int32
+                    description: Content-Length
+                    example: 10
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/binary/{id}-{unique}:
     get:
       tags:
-      - System
+        - System
       summary: Binary
       description: Download binary content.
       parameters:
-      - name: xmlid
-        in: query
-        description: XML-ID
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: 383-d1f5999
-      - name: model
-        in: query
-        description: Model
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: ir.attachment
-      - name: id
-        in: path
-        description: ID
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: integer
-          format: int32
-        example: 1
-      - name: field
-        in: query
-        description: Field
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: datas
-      - name: unique
-        in: path
-        description: Unique flag
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: boolean
-      - name: filename
-        in: query
-        description: Filename
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: filename.png
-      - name: filename_field
-        in: query
-        description: Filename Field
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: datas_fname
-      - name: mimetype
-        in: query
-        description: Mimetype
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: image/png
-      - name: access_token
-        in: query
-        description: Access Token
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: ASD21KSJADKAJI
-      - name: related_id
-        in: query
-        description: Related ID
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: integer
-          format: int32
-        example: 1
-      - name: access_mode
-        in: query
-        description: Access Mode
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: boolean
+        - name: xmlid
+          description: XML-ID
+          in: query
+          required: false
+          example: 383-d1f5999
+          schema:
+            type: string
+        - name: model
+          description: Model
+          in: query
+          required: false
+          example: ir.attachment
+          schema:
+            type: string
+        - name: id
+          description: ID
+          in: path
+          required: true
+          example: 1
+          schema:
+            type: integer
+            format: int32
+        - name: field
+          description: Field
+          in: query
+          required: false
+          example: datas
+          schema:
+            type: string
+        - name: unique
+          description: Unique flag
+          in: path
+          required: true
+          example: false
+          schema:
+            type: boolean
+        - name: filename
+          description: Filename
+          in: query
+          required: false
+          example: filename.png
+          schema:
+            type: string
+        - name: filename_field
+          description: Filename Field
+          in: query
+          required: false
+          example: datas_fname
+          schema:
+            type: string
+        - name: mimetype
+          description: Mimetype
+          in: query
+          required: false
+          example: image/png
+          schema:
+            type: string
+        - name: access_token
+          description: Access Token
+          in: query
+          required: false
+          example: ASD21KSJADKAJI
+          schema:
+            type: string
+        - name: related_id
+          description: Related ID
+          in: query
+          required: false
+          example: 1
+          schema:
+            type: integer
+            format: int32
+        - name: access_mode
+          description: Access Mode
+          in: query
+          required: false
+          example: false
+          schema:
+            type: boolean
       responses:
-        200:
+        '200':
           description: Content
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_8'
+                type: object
+                properties:
+                  content: 
+                    type: string
+                    description: Base64-Content
+                    example: ZGF0YSB0byBiZSBlbmNvZGVk
+                  content_disposition: 
+                    type: string
+                    description: Content-Disposition
+                    example: attachment; filename*=UTF-8''Image.png
+                  content_type: 
+                    type: string
+                    description: Content-Type
+                    example: image/png
+                  content_length: 
+                    type: integer
+                    format: int32
+                    description: Content-Length
+                    example: 10
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/binary/{id}-{unique}/{filename}:
     get:
       tags:
-      - System
+        - System
       summary: Binary
       description: Download binary content.
       parameters:
-      - name: xmlid
-        in: query
-        description: XML-ID
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: 383-d1f5999
-      - name: model
-        in: query
-        description: Model
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: ir.attachment
-      - name: id
-        in: path
-        description: ID
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: integer
-          format: int32
-        example: 1
-      - name: field
-        in: query
-        description: Field
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: datas
-      - name: unique
-        in: path
-        description: Unique flag
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: boolean
-      - name: filename
-        in: path
-        description: Filename
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: filename.png
-      - name: filename_field
-        in: query
-        description: Filename Field
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: datas_fname
-      - name: mimetype
-        in: query
-        description: Mimetype
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: image/png
-      - name: access_token
-        in: query
-        description: Access Token
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: ASD21KSJADKAJI
-      - name: related_id
-        in: query
-        description: Related ID
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: integer
-          format: int32
-        example: 1
-      - name: access_mode
-        in: query
-        description: Access Mode
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: boolean
+        - name: xmlid
+          description: XML-ID
+          in: query
+          required: false
+          example: 383-d1f5999
+          schema:
+            type: string
+        - name: model
+          description: Model
+          in: query
+          required: false
+          example: ir.attachment
+          schema:
+            type: string
+        - name: id
+          description: ID
+          in: path
+          required: true
+          example: 1
+          schema:
+            type: integer
+            format: int32
+        - name: field
+          description: Field
+          in: query
+          required: false
+          example: datas
+          schema:
+            type: string
+        - name: unique
+          description: Unique flag
+          in: path
+          required: true
+          example: false
+          schema:
+            type: boolean
+        - name: filename
+          description: Filename
+          in: path
+          required: true
+          example: filename.png
+          schema:
+            type: string
+        - name: filename_field
+          description: Filename Field
+          in: query
+          required: false
+          example: datas_fname
+          schema:
+            type: string
+        - name: mimetype
+          description: Mimetype
+          in: query
+          required: false
+          example: image/png
+          schema:
+            type: string
+        - name: access_token
+          description: Access Token
+          in: query
+          required: false
+          example: ASD21KSJADKAJI
+          schema:
+            type: string
+        - name: related_id
+          description: Related ID
+          in: query
+          required: false
+          example: 1
+          schema:
+            type: integer
+            format: int32
+        - name: access_mode
+          description: Access Mode
+          in: query
+          required: false
+          example: false
+          schema:
+            type: boolean
       responses:
-        200:
+        '200':
           description: Content
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_8'
+                type: object
+                properties:
+                  content: 
+                    type: string
+                    description: Base64-Content
+                    example: ZGF0YSB0byBiZSBlbmNvZGVk
+                  content_disposition: 
+                    type: string
+                    description: Content-Disposition
+                    example: attachment; filename*=UTF-8''Image.png
+                  content_type: 
+                    type: string
+                    description: Content-Type
+                    example: image/png
+                  content_length: 
+                    type: integer
+                    format: int32
+                    description: Content-Length
+                    example: 10
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all   
   /api/binary/{model}/{id}/{field}:
     get:
       tags:
-      - System
+        - System
       summary: Binary
       description: Download binary content.
       parameters:
-      - name: xmlid
-        in: query
-        description: XML-ID
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: 383-d1f5999
-      - name: model
-        in: path
-        description: Model
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: ir.attachment
-      - name: id
-        in: path
-        description: ID
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: integer
-          format: int32
-        example: 1
-      - name: field
-        in: path
-        description: Field
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: datas
-      - name: unique
-        in: query
-        description: Unique flag
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: boolean
-      - name: filename
-        in: query
-        description: Filename
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: filename.png
-      - name: filename_field
-        in: query
-        description: Filename Field
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: datas_fname
-      - name: mimetype
-        in: query
-        description: Mimetype
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: image/png
-      - name: access_token
-        in: query
-        description: Access Token
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: ASD21KSJADKAJI
-      - name: related_id
-        in: query
-        description: Related ID
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: integer
-          format: int32
-        example: 1
-      - name: access_mode
-        in: query
-        description: Access Mode
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: boolean
+        - name: xmlid
+          description: XML-ID
+          in: query
+          required: false
+          example: 383-d1f5999
+          schema:
+            type: string
+        - name: model
+          description: Model
+          in: path
+          required: true
+          example: ir.attachment
+          schema:
+            type: string
+        - name: id
+          description: ID
+          in: path
+          required: true
+          example: 1
+          schema:
+            type: integer
+            format: int32
+        - name: field
+          description: Field
+          in: path
+          required: true
+          example: datas
+          schema:
+            type: string
+        - name: unique
+          description: Unique flag
+          in: query
+          required: false
+          example: false
+          schema:
+            type: boolean
+        - name: filename
+          description: Filename
+          in: query
+          required: false
+          example: filename.png
+          schema:
+            type: string
+        - name: filename_field
+          description: Filename Field
+          in: query
+          required: false
+          example: datas_fname
+          schema:
+            type: string
+        - name: mimetype
+          description: Mimetype
+          in: query
+          required: false
+          example: image/png
+          schema:
+            type: string
+        - name: access_token
+          description: Access Token
+          in: query
+          required: false
+          example: ASD21KSJADKAJI
+          schema:
+            type: string
+        - name: related_id
+          description: Related ID
+          in: query
+          required: false
+          example: 1
+          schema:
+            type: integer
+            format: int32
+        - name: access_mode
+          description: Access Mode
+          in: query
+          required: false
+          example: false
+          schema:
+            type: boolean
       responses:
-        200:
+        '200':
           description: Content
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_8'
+                type: object
+                properties:
+                  content: 
+                    type: string
+                    description: Base64-Content
+                    example: ZGF0YSB0byBiZSBlbmNvZGVk
+                  content_disposition: 
+                    type: string
+                    description: Content-Disposition
+                    example: attachment; filename*=UTF-8''Image.png
+                  content_type: 
+                    type: string
+                    description: Content-Type
+                    example: image/png
+                  content_length: 
+                    type: integer
+                    format: int32
+                    description: Content-Length
+                    example: 10
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all  
   /api/binary/{model}/{id}/{field}/{filename}:
     get:
       tags:
-      - System
+        - System
       summary: Binary
       description: Download binary content.
       parameters:
-      - name: xmlid
-        in: query
-        description: XML-ID
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: 383-d1f5999
-      - name: model
-        in: path
-        description: Model
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: ir.attachment
-      - name: id
-        in: path
-        description: ID
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: integer
-          format: int32
-        example: 1
-      - name: field
-        in: path
-        description: Field
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: datas
-      - name: unique
-        in: query
-        description: Unique flag
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: boolean
-      - name: filename
-        in: path
-        description: Filename
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: filename.png
-      - name: filename_field
-        in: query
-        description: Filename Field
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: datas_fname
-      - name: mimetype
-        in: query
-        description: Mimetype
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: image/png
-      - name: access_token
-        in: query
-        description: Access Token
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: ASD21KSJADKAJI
-      - name: related_id
-        in: query
-        description: Related ID
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: integer
-          format: int32
-        example: 1
-      - name: access_mode
-        in: query
-        description: Access Mode
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: boolean
+        - name: xmlid
+          description: XML-ID
+          in: query
+          required: false
+          example: 383-d1f5999
+          schema:
+            type: string
+        - name: model
+          description: Model
+          in: path
+          required: true
+          example: ir.attachment
+          schema:
+            type: string
+        - name: id
+          description: ID
+          in: path
+          required: true
+          example: 1
+          schema:
+            type: integer
+            format: int32
+        - name: field
+          description: Field
+          in: path
+          required: true
+          example: datas
+          schema:
+            type: string
+        - name: unique
+          description: Unique flag
+          in: query
+          required: false
+          example: false
+          schema:
+            type: boolean
+        - name: filename
+          description: Filename
+          in: path
+          required: true
+          example: filename.png
+          schema:
+            type: string
+        - name: filename_field
+          description: Filename Field
+          in: query
+          required: false
+          example: datas_fname
+          schema:
+            type: string
+        - name: mimetype
+          description: Mimetype
+          in: query
+          required: false
+          example: image/png
+          schema:
+            type: string
+        - name: access_token
+          description: Access Token
+          in: query
+          required: false
+          example: ASD21KSJADKAJI
+          schema:
+            type: string
+        - name: related_id
+          description: Related ID
+          in: query
+          required: false
+          example: 1
+          schema:
+            type: integer
+            format: int32
+        - name: access_mode
+          description: Access Mode
+          in: query
+          required: false
+          example: false
+          schema:
+            type: boolean
       responses:
-        200:
+        '200':
           description: Content
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_8'
+                type: object
+                properties:
+                  content: 
+                    type: string
+                    description: Base64-Content
+                    example: ZGF0YSB0byBiZSBlbmNvZGVk
+                  content_disposition: 
+                    type: string
+                    description: Content-Disposition
+                    example: attachment; filename*=UTF-8''Image.png
+                  content_type: 
+                    type: string
+                    description: Content-Type
+                    example: image/png
+                  content_length: 
+                    type: integer
+                    format: int32
+                    description: Content-Length
+                    example: 10
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/reports/{name}:
     get:
       tags:
-      - System
+        - System
       summary: Reports
       description: Search for available reports.
       parameters:
-      - name: name
-        in: path
-        description: Name
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: ledger
-      - name: model
-        in: query
-        description: Model
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: res.partner
+        - name: name
+          description: Name
+          in: path
+          required: true
+          example: ledger
+          schema:
+            type: string
+        - name: model
+          description: Model
+          in: query
+          required: false
+          example: res.partner
+          schema:
+            type: string
       responses:
-        200:
+        '200':
           description: List of available reports
           content:
             application/json:
               schema:
-                example:
-                - id: 30
-                  model: ir.model
-                  name: Model Overview
-                  report_name: base.report_irmodeloverview
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int32
+                      description: ID
+                      example: 30
+                    model:
+                      type: string
+                      description: Model
+                      example: ir.model
+                    name:
+                      type: string
+                      description: Name
+                      example: Model Overview
+                    report_name:
+                      type: string
+                      description: Report Name
+                      example: base.report_irmodeloverview
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/reports/{name}/{model}:
     get:
       tags:
-      - System
+        - System
       summary: Reports
       description: Search for available reports.
       parameters:
-      - name: name
-        in: path
-        description: Name
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: ledger
-      - name: model
-        in: path
-        description: Model
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: res.partner
+        - name: name
+          description: Name
+          in: path
+          required: true
+          example: ledger
+          schema:
+            type: string
+        - name: model
+          description: Model
+          in: path
+          required: true
+          example: res.partner
+          schema:
+            type: string
       responses:
-        200:
+        '200':
           description: List of available reports
           content:
             application/json:
               schema:
-                example:
-                - id: 30
-                  model: ir.model
-                  name: Model Overview
-                  report_name: base.report_irmodeloverview
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int32
+                      description: ID
+                      example: 30
+                    model:
+                      type: string
+                      description: Model
+                      example: ir.model
+                    name:
+                      type: string
+                      description: Name
+                      example: Model Overview
+                    report_name:
+                      type: string
+                      description: Report Name
+                      example: base.report_irmodeloverview
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/report/{report}:
     get:
       tags:
-      - System
+        - System
       summary: Report
       description: Creates a new report.
       parameters:
-      - name: report
-        in: path
-        description: Report
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: TODO
-      - name: ids
-        in: query
-        description: IDs
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: type
-        in: query
-        description: Type
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: context
-        in: query
-        description: Context
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: options
-        in: query
-        description: Options
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
+        - name: report
+          description: Report
+          in: path
+          required: true
+          example: base.report_irmodulereference
+          schema:
+            type: string
+        - name: ids
+          description: IDs
+          in: query
+          required: true
+          example: '[1, 2]'
+          schema:
+            type: string
+        - name: type
+          description: Type
+          in: query
+          required: false
+          example: pdf
+          schema:
+            type: string
+        - name: context
+          description: Context
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: options
+          description: Options
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
-        200:
+        '200':
           description: Report
           content:
             application/json:
               schema:
-                example:
-                  content: CiA=
-                  content_length: 7160
-                  content_type: application/pdf
-                  report: base.report_irmodulereference
-                  type: PDF
+                type: object
+                properties:
+                  content:
+                    type: string
+                    description: Content
+                    example: CiA=
+                  content_length: 
+                    type: integer
+                    format: int32
+                    description: Content Length
+                    example: 7160
+                  content_type: 
+                    type: string
+                    description: Content Type
+                    example: application/pdf
+                  report: 
+                    type: string
+                    description: Report
+                    example: base.report_irmodulereference
+                  type: 
+                    type: string
+                    description: Type
+                    example: PDF
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/report/{report}/{type}:
     get:
       tags:
-      - System
+        - System
       summary: Report
       description: Creates a new report.
       parameters:
-      - name: report
-        in: path
-        description: Report
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: TODO
-      - name: type
-        in: path
-        description: Type
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: TODO
-      - name: ids
-        in: query
-        description: IDs
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: context
-        in: query
-        description: Context
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: options
-        in: query
-        description: Options
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
+        - name: report
+          description: Report
+          in: path
+          required: true
+          example: base.report_irmodulereference
+          schema:
+            type: string
+        - name: type
+          description: Type
+          in: path
+          required: true
+          example: pdf
+          schema:
+            type: string
+        - name: ids
+          description: IDs
+          in: query
+          required: true
+          example: '[1, 2]'
+          schema:
+            type: string
+        - name: context
+          description: Context
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: options
+          description: Options
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
-        200:
-          description: TODO
+        '200':
+          description: Report
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: string
+                    description: Content
+                    example: CiA=
+                  content_length: 
+                    type: integer
+                    format: int32
+                    description: Content Length
+                    example: 7160
+                  content_type: 
+                    type: string
+                    description: Content Type
+                    example: application/pdf
+                  report: 
+                    type: string
+                    description: Report
+                    example: base.report_irmodulereference
+                  type: 
+                    type: string
+                    description: Type
+                    example: PDF
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all                  
   /api/field_names/{model}:
     get:
       tags:
-      - Model
+        - Model
       summary: Field Names
-      description: TODO
+      description: List of field names.
       parameters:
-      - name: model
-        in: path
-        description: TODO
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: TODO
+        - name: model
+          description: Model
+          in: path
+          required: true
+          example: res.partner
+          schema:
+            type: string
       responses:
-        200:
-          description: TODO
+        '200':
+          description: List of field names
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all 
   /api/fields/{model}:
     get:
       tags:
-      - Model
+        - Model
       summary: Fields
       description: TODO
       parameters:
-      - name: model
-        in: path
-        description: TODO
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: TODO
-      - name: fields
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: attributes
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
+        - name: model
+          description: Model
+          in: path
+          required: true
+          example: res.partner
+          schema:
+            type: string
+        - name: fields
+          description: Fields
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: attributes
+          description: Attributes
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
-        200:
-          description: TODO
+        '200':
+          description: Field information
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all 
   /api/metadata/{model}:
     get:
       tags:
-      - Model
+        - Model
       summary: Metadata
       description: TODO
       parameters:
-      - name: model
-        in: path
-        description: TODO
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: TODO
-      - name: ids
-        in: query
-        description: TODO
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: context
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
+        - name: model
+          description: Model
+          in: path
+          required: true
+          example: res.partner
+          schema:
+            type: string
+        - name: ids
+          description: IDs
+          in: query
+          required: true
+          example: '[1, 2]'
+          schema:
+            type: string
+        - name: context
+          description: Context
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
-        200:
-          description: TODO
+        '200':
+          description: Meta information
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all 
   /api/search/{model}:
     get:
       tags:
-      - Model
+        - Model
       summary: Search
-      description: Request system information.
+      description: Search for matching records.
       parameters:
-      - name: model
-        in: path
-        description: Model in the environment
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: res.partner
-      - name: domain
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: context
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: count
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: boolean
-      - name: limit
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: integer
-          format: int32
-          example: 80
-      - name: offset
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: integer
-          format: int32
-          example: 0
-      - name: order
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
+        - name: model
+          description: Model
+          in: path
+          required: true
+          example: res.partner
+          schema:
+            type: string
+        - name: domain
+          description: Domain
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: context
+          description: Context
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: count
+          description: Count
+          in: query
+          required: false
+          schema:
+            type: boolean
+        - name: limit
+          description: Limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            example: 80
+        - name: offset
+          description: Offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            example: 0
+        - name: order
+          description: Order
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
-        200:
+        '200':
           description: IDs
           content:
             application/json:
               schema:
                 type: array
-                example:
-                - 1
-                - 2
-                - 3
                 items:
                   type: integer
                   format: int32
+                example: [1, 2, 3]
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/search/{model}/{order}:
     get:
       tags:
-      - Model
+        - Model
       summary: Search
-      description: Request system information.
+      description: Search for matching records.
       parameters:
-      - name: model
-        in: path
-        description: Model in the environment
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: res.partner
-      - name: order
-        in: path
-        description: Sort string (asc, desc)
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: name desc
-      - name: domain
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: context
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: count
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: boolean
-      - name: limit
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: integer
-          format: int32
-          example: 80
-      - name: offset
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: integer
-          format: int32
-          example: 0
+        - name: model
+          description: Model
+          in: path
+          required: true
+          example: res.partner
+          schema:
+            type: string
+        - name: order
+          description: 'Sort string (asc, desc)'
+          in: path
+          required: true
+          example: name desc
+          schema:
+            type: string
+        - name: domain
+          description: Domain
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: context
+          description: Context
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: count
+          description: Count
+          in: query
+          required: false
+          schema:
+            type: boolean
+        - name: limit
+          description: Limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            example: 80
+        - name: offset
+          description: Offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            example: 0
       responses:
-        200:
+        '200':
           description: IDs
           content:
             application/json:
               schema:
                 type: array
-                example:
-                - 1
-                - 2
-                - 3
                 items:
                   type: integer
                   format: int32
+                example: [1, 2, 3]
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/search/{model}/{limit}/{order}:
     get:
       tags:
-      - Model
+        - Model
       summary: Search
-      description: Request system information.
+      description: Search for matching records.
       parameters:
-      - name: model
-        in: path
-        description: Model in the environment
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: res.partner
-      - name: limit
-        in: path
-        description: Limt of the search
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: integer
-          format: int32
-        example: 25
-      - name: order
-        in: path
-        description: Sort string (asc, desc)
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: name desc
-      - name: domain
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: context
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: count
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: boolean
-      - name: offset
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: integer
-          format: int32
-          example: 0
+        - name: model
+          description: Model in the environment
+          in: path
+          required: true
+          example: res.partner
+          schema:
+            type: string
+        - name: limit
+          description: Limt of the search
+          in: path
+          required: true
+          example: 25
+          schema:
+            type: integer
+            format: int32
+        - name: order
+          description: 'Sort string (asc, desc)'
+          in: path
+          required: true
+          example: name desc
+          schema:
+            type: string
+        - name: domain
+          description: Domain
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: context
+          description: Context
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: count
+          description: Count
+          in: query
+          required: false
+          schema:
+            type: boolean
+        - name: offset
+          description: Offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            example: 0
       responses:
-        200:
+        '200':
           description: IDs
           content:
             application/json:
               schema:
                 type: array
-                example:
-                - 1
-                - 2
-                - 3
                 items:
                   type: integer
                   format: int32
+                example: [1, 2, 3]
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/search/{model}/{limit}/{offset}/{order}:
     get:
       tags:
-      - Model
+        - Model
       summary: Search
-      description: Request system information.
+      description: Search for matching records.
       parameters:
-      - name: model
-        in: path
-        description: Model in the environment
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: res.partner
-      - name: limit
-        in: path
-        description: Limt of the search
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: integer
-          format: int32
-        example: 25
-      - name: offset
-        in: path
-        description: Offset of the search
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: integer
-          format: int32
-        example: 1
-      - name: order
-        in: path
-        description: Sort string (asc, desc)
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: name desc
-      - name: domain
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: context
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: count
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: boolean
+        - name: model
+          description: Model in the environment
+          in: path
+          required: true
+          example: res.partner
+          schema:
+            type: string
+        - name: limit
+          description: Limt of the search
+          in: path
+          required: true
+          example: 25
+          schema:
+            type: integer
+            format: int32
+        - name: offset
+          description: Offset of the search
+          in: path
+          required: true
+          example: 1
+          schema:
+            type: integer
+            format: int32
+        - name: order
+          description: 'Sort string (asc, desc)'
+          in: path
+          required: true
+          example: name desc
+          schema:
+            type: string
+        - name: domain
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: context
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: count
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: boolean
       responses:
-        200:
+        '200':
           description: IDs
           content:
             application/json:
               schema:
                 type: array
-                example:
-                - 1
-                - 2
-                - 3
                 items:
                   type: integer
                   format: int32
+                example: [1, 2, 3]
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/name/{model}:
     get:
       tags:
-      - Model
+        - Model
       summary: Search
-      description: Request system information.
+      description: Search for matching records.
       parameters:
-      - name: model
-        in: path
-        description: Model in the environment
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: res.partner
-      - name: ids
-        in: query
-        description: TODO
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: context
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
+        - name: model
+          description: Model in the environment
+          in: path
+          required: true
+          example: res.partner
+          schema:
+            type: string
+        - name: ids
+          description: TODO
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: context
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
-        200:
+        '200':
+          description: ''
           content:
             application/json:
               schema:
                 type: array
-                example:
-                - - 1
-                  - YourCompany
-                - - 2
-                  - System
                 items:
                   type: array
                   items:
                     anyOf:
-                    - type: string
-                    - type: integer
-                      format: int32
+                      - type: string
+                      - type: integer
+                example: [[1, "YourCompany"], [2, "System"]]
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/read/{model}:
     get:
       tags:
-      - Model
+        - Model
       summary: Search
-      description: Request system information.
+      description: Search for matching records.
       parameters:
-      - name: model
-        in: path
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-      - name: ids
-        in: query
-        description: TODO
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: fields
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: context
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
+        - name: model
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: ids
+          description: TODO
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: fields
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: context
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
-        200:
+        '200':
           description: TODO
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/search_read/{model}:
     get:
       tags:
-      - Model
+        - Model
       summary: Search
-      description: Request system information.
+      description: Search for matching records.
       parameters:
-      - name: model
-        in: path
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-      - name: domain
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: fields
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: context
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: limit
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: integer
-          format: int32
-          example: 80
-      - name: offset
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: integer
-          format: int32
-          example: 0
-      - name: order
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
+        - name: model
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: domain
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: fields
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: context
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: limit
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            example: 80
+        - name: offset
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            example: 0
+        - name: order
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
-        200:
+        '200':
           description: TODO
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/search_read/{model}/{order}:
     get:
       tags:
-      - Model
+        - Model
       summary: Search
-      description: Request system information.
+      description: Search for matching records.
       parameters:
-      - name: model
-        in: path
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-      - name: order
-        in: path
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-      - name: domain
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: fields
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: context
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: limit
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: integer
-          format: int32
-          example: 80
-      - name: offset
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: integer
-          format: int32
-          example: 0
+        - name: model
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: order
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: domain
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: fields
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: context
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: limit
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            example: 80
+        - name: offset
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            example: 0
       responses:
-        200:
+        '200':
           description: TODO
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/search_read/{model}/{limit}/{order}:
     get:
       tags:
-      - Model
+        - Model
       summary: Version
-      description: Request system information.
+      description: Search for matching records.
       parameters:
-      - name: model
-        in: path
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-      - name: limit
-        in: path
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-      - name: order
-        in: path
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-      - name: domain
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: fields
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: context
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: offset
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: integer
-          format: int32
-          example: 0
+        - name: model
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: order
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: domain
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: fields
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: context
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: offset
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            example: 0
       responses:
-        200:
+        '200':
           description: TODO
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/search_read/{model}/{limit}/{offset}/{order}:
     get:
       tags:
-      - Model
+        - Model
       summary: Version
-      description: Request system information.
+      description: Search for matching records.
       parameters:
-      - name: model
-        in: path
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-      - name: limit
-        in: path
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: integer
-          format: int32
-      - name: offset
-        in: path
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: integer
-          format: int32
-      - name: order
-        in: path
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-      - name: domain
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: fields
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: context
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
+        - name: model
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: offset
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: order
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: domain
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: fields
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: context
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
-        200:
+        '200':
           description: TODO
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/read_group/{model}:
     get:
       tags:
-      - Model
+        - Model
       summary: Version
-      description: Request system information.
+      description: Search for matching records.
       parameters:
-      - name: model
-        in: path
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-      - name: domain
-        in: query
-        description: TODO
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: fields
-        in: query
-        description: TODO
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: groupby
-        in: query
-        description: TODO
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: context
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: offset
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: integer
-          format: int32
-          example: 0
-      - name: limit
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: integer
-          format: int32
-      - name: orderby
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: lazy
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: boolean
+        - name: model
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: domain
+          description: TODO
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: fields
+          description: TODO
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: groupby
+          description: TODO
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: context
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: offset
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            example: 0
+        - name: limit
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: orderby
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: lazy
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: boolean
+            example: true
       responses:
-        200:
+        '200':
           description: TODO
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/read_group/{model}/{orderby}:
     get:
       tags:
-      - Model
+        - Model
       summary: Version
-      description: Request system information.
+      description: Search for matching records.
       parameters:
-      - name: model
-        in: path
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-      - name: orderby
-        in: path
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-      - name: domain
-        in: query
-        description: TODO
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: fields
-        in: query
-        description: TODO
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: groupby
-        in: query
-        description: TODO
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: context
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: offset
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: integer
-          format: int32
-          example: 0
-      - name: limit
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: integer
-          format: int32
-      - name: lazy
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: boolean
+        - name: model
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: orderby
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: domain
+          description: TODO
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: fields
+          description: TODO
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: groupby
+          description: TODO
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: context
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: offset
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            example: 0
+        - name: limit
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: lazy
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: boolean
+            example: true
       responses:
-        200:
+        '200':
           description: TODO
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/read_group/{model}/{limit}/{orderby}:
     get:
       tags:
-      - Model
+        - Model
       summary: Version
-      description: Request system information.
+      description: Search for matching records.
       parameters:
-      - name: model
-        in: path
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-      - name: limit
-        in: path
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: integer
-          format: int32
-      - name: orderby
-        in: path
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-      - name: domain
-        in: query
-        description: TODO
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: fields
-        in: query
-        description: TODO
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: groupby
-        in: query
-        description: TODO
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: context
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: offset
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: integer
-          format: int32
-          example: 0
-      - name: lazy
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: boolean
+        - name: model
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: orderby
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: domain
+          description: TODO
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: fields
+          description: TODO
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: groupby
+          description: TODO
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: context
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: offset
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            example: 0
+        - name: lazy
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: boolean
+            example: true
       responses:
-        200:
+        '200':
           description: TODO
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/read_group/{model}/{limit}/{offset}/{orderby}:
     get:
       tags:
-      - Model
+        - Model
       summary: Version
-      description: Request system information.
+      description: Search for matching records.
       parameters:
-      - name: model
-        in: path
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-      - name: limit
-        in: path
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: integer
-          format: int32
-      - name: offset
-        in: path
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: integer
-          format: int32
-      - name: orderby
-        in: path
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-      - name: domain
-        in: query
-        description: TODO
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: fields
-        in: query
-        description: TODO
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: groupby
-        in: query
-        description: TODO
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: context
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: lazy
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: boolean
+        - name: model
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: offset
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: orderby
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: domain
+          description: TODO
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: fields
+          description: TODO
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: groupby
+          description: TODO
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: context
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: lazy
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: boolean
+            example: true
       responses:
-        200:
+        '200':
           description: TODO
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/create/{model}:
     post:
       tags:
-      - Model
+        - Model
       summary: Version
-      description: Request system information.
+      description: Search for matching records.
       parameters:
-      - name: model
-        in: path
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-      - name: values
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: context
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      responses:
-        200:
+        - name: model
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: values
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: context
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+      responses: 
+        '200':
           description: TODO
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/write/{model}:
     put:
       tags:
-      - Model
+        - Model
       summary: Version
-      description: Request system information.
+      description: Search for matching records.
       parameters:
-      - name: model
-        in: path
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-      - name: ids
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: values
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: context
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
+        - name: model
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: ids
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: values
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: context
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
-        200:
+        '200':
           description: TODO
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/unlink/{model}:
     delete:
       tags:
-      - Model
+        - Model
       summary: Version
-      description: Request system information.
+      description: Search for matching records.
       parameters:
-      - name: model
-        in: path
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-      - name: ids
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: context
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
+        - name: model
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: ids
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: context
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
-        200:
+        '200':
           description: TODO
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/access/rights/{model}:
     get:
       tags:
-      - Security
+        - Security
       summary: Access Rights
       description: TODO
       parameters:
-      - name: model
-        in: path
-        description: TODO
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: TODO
-      - name: operation
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-          example: read
+        - name: model
+          description: TODO
+          in: path
+          required: true
+          example: TODO
+          schema:
+            type: string
+        - name: operation
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+            example: read
       responses:
-        200:
+        '200':
           description: TODO
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/access/rights/{model}/{operation}:
     get:
       tags:
-      - Security
+        - Security
       summary: Access Rights
       description: TODO
       parameters:
-      - name: model
-        in: path
-        description: TODO
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: TODO
-      - name: operation
-        in: path
-        description: TODO
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: TODO
+        - name: model
+          description: TODO
+          in: path
+          required: true
+          example: TODO
+          schema:
+            type: string
+        - name: operation
+          description: TODO
+          in: path
+          required: true
+          example: TODO
+          schema:
+            type: string
       responses:
-        200:
+        '200':
           description: TODO
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/access/rules/{model}:
     get:
       tags:
-      - Security
+        - Security
       summary: Access Rules
       description: TODO
       parameters:
-      - name: model
-        in: path
-        description: TODO
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: TODO
-      - name: ids
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: operation
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-          example: read
+        - name: model
+          description: TODO
+          in: path
+          required: true
+          example: TODO
+          schema:
+            type: string
+        - name: ids
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: operation
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+            example: read
       responses:
-        200:
+        '200':
           description: TODO
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/access/rules/{model}/{operation}:
     get:
       tags:
-      - Security
+        - Security
       summary: Access Rules
       description: TODO
       parameters:
-      - name: model
-        in: path
-        description: TODO
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: TODO
-      - name: operation
-        in: path
-        description: TODO
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: TODO
-      - name: ids
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
+        - name: model
+          description: TODO
+          in: path
+          required: true
+          example: TODO
+          schema:
+            type: string
+        - name: operation
+          description: TODO
+          in: path
+          required: true
+          example: TODO
+          schema:
+            type: string
+        - name: ids
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
-        200:
+        '200':
           description: TODO
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/access/fields/{model}:
     get:
       tags:
-      - Security
+        - Security
       summary: Access Fields
       description: TODO
       parameters:
-      - name: model
-        in: path
-        description: TODO
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: TODO
-      - name: operation
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-          example: read
-      - name: fields
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
+        - name: model
+          description: TODO
+          in: path
+          required: true
+          example: TODO
+          schema:
+            type: string
+        - name: operation
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+            example: read
+        - name: fields
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
-        200:
+        '200':
           description: TODO
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/access/fields/{model}/{operation}:
     get:
       tags:
-      - Security
+        - Security
       summary: Access Fields
       description: TODO
       parameters:
-      - name: model
-        in: path
-        description: TODO
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: TODO
-      - name: operation
-        in: path
-        description: TODO
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: TODO
-      - name: fields
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
+        - name: model
+          description: TODO
+          in: path
+          required: true
+          example: TODO
+          schema:
+            type: string
+        - name: operation
+          description: TODO
+          in: path
+          required: true
+          example: TODO
+          schema:
+            type: string
+        - name: fields
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
-        200:
+        '200':
           description: TODO
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/access/{model}:
     get:
       tags:
-      - Security
+        - Security
       summary: General Access
       description: TODO
       parameters:
-      - name: model
-        in: path
-        description: TODO
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: TODO
-      - name: ids
-        in: query
-        description: TODO
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: operation
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-          example: read
-      - name: fields
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
+        - name: model
+          description: TODO
+          in: path
+          required: true
+          example: TODO
+          schema:
+            type: string
+        - name: ids
+          description: TODO
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: operation
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
+            example: read
+        - name: fields
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
-        200:
+        '200':
           description: TODO
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/access/{model}/{operation}:
     get:
       tags:
-      - Security
+        - Security
       summary: General Access
       description: TODO
       parameters:
-      - name: model
-        in: path
-        description: TODO
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: TODO
-      - name: operation
-        in: path
-        description: TODO
-        required: true
-        style: SIMPLE
-        explode: false
-        schema:
-          type: string
-        example: TODO
-      - name: ids
-        in: query
-        description: TODO
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: fields
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
+        - name: model
+          description: TODO
+          in: path
+          required: true
+          example: TODO
+          schema:
+            type: string
+        - name: operation
+          description: TODO
+          in: path
+          required: true
+          example: TODO
+          schema:
+            type: string
+        - name: ids
+          description: TODO
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: fields
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
-        200:
+        '200':
           description: TODO
       security:
-      - implicit:
-        - all
+        - OAuth2:
+            - all
   /api/change_master_password:
     post:
       tags:
-      - Database
+        - Database
       summary: Master Password
       description: TODO
       parameters:
-      - name: password_new
-        in: query
-        description: TODO
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: password_old
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: admin
+        - name: password_new
+          description: TODO
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: password_old
+          description: TODO
+          in: query
+          required: false
+          example: admin
+          schema:
+            type: string
       responses:
-        200:
+        '200':
           description: TODO
   /api/database/list:
     get:
       tags:
-      - Database
+        - Database
       summary: Database List
       description: TODO
       responses:
-        200:
+        '200':
           description: TODO
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  databases:
+                    type: array
+                    items:
+                      type: string
+                      example: db1
+                    description: Databases
+                  incompatible_databases: 
+                    type: array
+                    description: Incompatible Databases
+                    items:
+                      type: string
+                    example: []
   /api/database/backup:
     post:
       tags:
-      - Database
+        - Database
       summary: Backup Database
       description: TODO
       parameters:
-      - name: database_name
-        in: query
-        description: TODO
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: master_password
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: admin
-      - name: backup_format
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: zip
+        - name: database_name
+          description: TODO
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: master_password
+          description: TODO
+          in: query
+          required: false
+          example: admin
+          schema:
+            type: string
+        - name: backup_format
+          description: TODO
+          in: query
+          required: false
+          example: zip
+          schema:
+            type: string
       responses:
-        200:
+        '200':
           description: TODO
   /api/database/restore:
     post:
       tags:
-      - Database
+        - Database
       summary: Restore Database
       description: TODO
       parameters:
-      - name: backup_file
-        in: query
-        description: TODO
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: database_name
-        in: query
-        description: TODO
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: master_password
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: admin
-      - name: copy
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: boolean
+        - name: backup_file
+          description: TODO
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: database_name
+          description: TODO
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: master_password
+          description: TODO
+          in: query
+          required: false
+          example: admin
+          schema:
+            type: string
+        - name: copy
+          description: TODO
+          in: query
+          required: false
+          schema:
+            type: boolean
       responses:
-        200:
+        '200':
           description: TODO
   /api/database/create:
     post:
       tags:
-      - Database
+        - Database
       summary: Create Database
       description: TODO
       parameters:
-      - name: database_name
-        in: query
-        description: TODO
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: admin_login
-        in: query
-        description: TODO
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: admin_password
-        in: query
-        description: TODO
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: master_password
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: admin
-      - name: lang
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: en_US
+        - name: database_name
+          description: TODO
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: admin_login
+          description: TODO
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: admin_password
+          description: TODO
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: master_password
+          description: TODO
+          in: query
+          required: false
+          example: admin
+          schema:
+            type: string
+        - name: lang
+          description: TODO
+          in: query
+          required: false
+          example: en_US
+          schema:
+            type: string
       responses:
-        200:
+        '200':
           description: TODO
   /api/database/duplicate:
     post:
       tags:
-      - Database
+        - Database
       summary: Duplicate Database
       description: TODO
       parameters:
-      - name: database_old
-        in: query
-        description: TODO
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: database_new
-        in: query
-        description: TODO
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: master_password
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: admin
+        - name: database_old
+          description: TODO
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: database_new
+          description: TODO
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: master_password
+          description: TODO
+          in: query
+          required: false
+          example: admin
+          schema:
+            type: string
       responses:
-        200:
+        '200':
           description: TODO
   /api/database/drop:
     post:
       tags:
-      - Database
+        - Database
       summary: Drop Database
       description: TODO
       parameters:
-      - name: database_name
-        in: query
-        description: TODO
-        required: true
-        style: FORM
-        explode: true
-        schema:
-          type: string
-      - name: master_password
-        in: query
-        description: TODO
-        required: false
-        style: FORM
-        explode: true
-        schema:
-          type: string
-        example: admin
-      responses:
-        200:
+        - name: database_name
           description: TODO
-components:
-  schemas:
-    inline_response_200:
-      type: object
-      properties:
-        type:
-          type: string
-        color:
-          type: string
-      example: '{"oauth_token":"mXYKtuv8k3NJfnpLMpU3KFuEijXx2Aat","oauth_token_secret":"QAlvAmzyULWeitpe24oNhj3n91los7W5"}'
-    inline_response_200_1:
-      type: object
-      properties:
-        type:
-          type: string
-        color:
-          type: string
-      example: '{"oauth_token":"mXYKtuv8k3NJfnpLMpU3KFuEijXx2Aat","oauth_verifier":"sdflk3450FASDLJasd2349dfs"}'
-    inline_response_200_2:
-      type: object
-      properties:
-        type:
-          type: string
-        color:
-          type: string
-      example: '{"oauth_token":"RF7gImCv0B58eogLiPmOmNPizZEVVUWP","oauth_token_secret":"oxBUTIjTl8gfbxEv2jpXo5rRtQ16u3Lg"}'
-    inline_response_200_3:
-      type: object
-      properties:
-        type:
-          type: string
-        color:
-          type: string
-      example: '{"code":"dcee1806d2c50d0fb598","state":"Y1Ux1iNPvn6KYQK5Lj84WJ9VJrQw1L"}'
-    inline_response_200_4:
-      type: object
-      properties:
-        type:
-          type: string
-        color:
-          type: string
-      example: '{"access_token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIn","token_type":"bearer","expires_in":"7/20/2017
-        12:00:05","refresh_token":"ZXIiLCJnaXZlbl9uYW1lIjoiRnJhbmsifQ"}'
-    inline_response_200_5:
-      type: object
-      properties:
-        api_version:
-          type: integer
-          description: Version
-          format: int32
-          example: 3
-        server_serie:
-          type: string
-          description: Server Serie
-          example: "12.0"
-        server_version:
-          type: string
-          description: Server Version
-          example: 12.0-20180122
-        server_version_info:
-          type: array
-          description: Info
-          example:
-          - 12
-          - 0
-          - 0
-          - final
-          - 0
-          - ""
-          items:
-            oneOf:
-            - type: string
-            - type: integer
-              format: int32
-    inline_response_200_6:
-      type: object
-      properties:
-        uid:
-          type: integer
-          description: UID
-          format: int32
-          example: 3
-        name:
-          type: string
-          description: Name
-          example: Max
-    inline_response_200_7_context:
-      type: object
-      properties:
-        lang:
-          type: string
-          description: Language
-          example: en_US
-        tz:
-          type: string
-          description: Timezone
-          example: Europe/Brussels
-        uid:
-          type: integer
-          description: UID
-          format: int32
-          example: 3
-    inline_response_200_7:
-      type: object
-      properties:
-        companies:
-          type: boolean
-          description: Companies flag
-        company_id:
-          type: integer
-          description: Company
-          format: int32
-          example: 1
-        context:
-          $ref: '#/components/schemas/inline_response_200_7_context'
-        currencies:
-          example:
-            1:
-              digits:
-              - 69
-              - 2
-              position: after
-              symbol: €
-        db:
-          type: string
-          description: Name
-          example: demo
-        display_name:
-          type: string
-          description: Name
-          example: YourCompany, Mitchell Admin
-        is_admin:
-          type: boolean
-          description: Companies flag
-        is_system:
-          type: boolean
-          description: Companies flag
-        login:
-          type: string
-          description: Name
-          example: demo
-        name:
-          type: string
-          description: Name
-          example: Mitchell Admin
-        partner_id:
-          type: integer
-          description: UID
-          format: int32
-          example: 4
-        uid:
-          type: integer
-          description: UID
-          format: int32
-          example: 3
-        web.base.url:
-          type: string
-          description: Name
-          example: http://127.0.0.1:8069
-    inline_response_200_8:
-      type: object
-      properties:
-        content:
-          type: string
-          description: Base64-Content
-          example: ZGF0YSB0byBiZSBlbmNvZGVk
-        content_disposition:
-          type: string
-          description: Content-Disposition
-          example: attachment; filename*=UTF-8''Image.png
-        content_type:
-          type: string
-          description: Content-Type
-          example: image/png
-        content_length:
-          type: integer
-          description: Content-Length
-          format: int32
-          example: 10
-  securitySchemes:
-    implicit:
-      type: OAUTH2
-      flows:
-        implicit:
-          authorizationUrl: https:demo.mukit.at/api/authentication/oauth2/authorize
-          scopes:
-            all: Basic security settings without additional restrictions
-  extensions: {}
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: master_password
+          description: TODO
+          in: query
+          required: false
+          example: admin
+          schema:
+            type: string
+      responses:
+        '200':
+          description: TODO
