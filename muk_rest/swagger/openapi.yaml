@@ -8,7 +8,10 @@ info:
     Afterwards, a set of routes to interact with the server are provided. The
     API can be used by any language or framework which can make an HTTP requests
     and receive responses with JSON payloads and works with both the Community
-    and the Enterprise Edition.<br/><br/>
+    and the Enterprise Edition.
+    <br/><br/>
+    Note that the authentication routes are for example and information only. To login to the API please use the 'Authroize' button. This is necessary to test the protected routes. Since the API adheres to the OAuth1 and OAuth2 standards, it is advisable to use an appropriate client. In as well as every programming language you can find a corresponding one. A list of some can be found at this <a href='https://github.com/muk-it/muk_docs/blob/12%2C0/muk_rest/clients/clients.md'>link</a>.
+    <br/><br/>
     Authentication: Mobile Application Flow<br/>
     Client ID: MobileApplicationFlowDemoClientKey<br/>
     User: demo<br/>
@@ -169,7 +172,7 @@ paths:
       description: >-
         OAuth Authentication as described by <a href='https://tools.ietf.org/html/rfc5849'>RFC5849</a>.
         <br/>
-        Exchange the temporary credentials with the access token. The values are passed by an authentication header. The following values must be provided to initiate a OAuth1 authentication:
+        Exchange the temporary credentials with the access token. The values are passed by an authentication header. The following values must be provided to authenticate via OAuth1:
         <br/>
         <ul>
           <li>
@@ -220,7 +223,7 @@ paths:
           in: header
           required: true
           example: >-
-            oauth_consumer_key="OAuthDemoClientKey",
+            OAuth oauth_consumer_key="OAuthDemoClientKey",
             oauth_token="mXYKtuv8k3NASDWE34121KFuEijXx2Aat",
             oauth_signature_method="HMAC-SHA1",
             oauth_timestamp="1500777189",
@@ -251,37 +254,49 @@ paths:
         - Authentication
       summary: OAuth2 - Authorization
       description: >-
-        Authenticates the user with the Odoo server. All headers must be passed
-        via the OAuth header. </br> 
-        The Web Application Flow is taken as an example. </br>
-        The API supports all 4 OAuth2 Grant Types.
+        OAuth Authentication as described by <a href='https://tools.ietf.org/html/rfc6749'>RFC6749</a>.
+        <br/>
+        The values are passed by an authentication header. The following values must be provided to authorize a OAuth2 authentication. The Web Application Flow is taken as an example but the API supports all 4 OAuth2 Grant Types.
+        <br/>
+        <ul>
+          <li>
+            <strong>Scope (scope)</strong>
+            The scope argument is used to determine the corresponding access control. In case the OAuth setting was created with 'Basic Access Control' the value 'all' can be passed.
+          </li>
+          <li>
+            <strong>Client ID (client_id)</strong>
+            The key that was created in Odoo to authenticate the client
+          </li>
+          <li>
+            <strong>Callback (redirect_uri)</strong>
+            An absolute URL to which the Server refers the user back when the authorization process is completed.
+          </li>
+          <li>
+            <strong>Grant Type (response_type)</strong>
+            The grant type used for the authentication flow.
+          </li>
+        </ul>
+        <pre><code>POST /api/authentication/oauth1/token HTTP/1.1
+        
+        Host: server.example.com 
+        
+        Authorization: OAuth scope='Example'
+          client_id='uwCrAHAQbL7D9cvJLIztNaZ0bziEGMDh',
+          state='Y1Ux1iNPvn6KYQK5Lj84WJ9VJrQw1L',
+          redirect_uri='https://client.example.com/callback',
+          response_type='code'
+        </code></pre>
       parameters:
-        - name: client_id
-          description: Client ID
+        - name: Authorization
+          description: OAuth Authorization
           in: header
           required: true
-          example: uwCrAHAQbL7D9cvJLIztNaZ0bziEGMDh
-          schema:
-            type: string
-        - name: state
-          description: State
-          in: header
-          required: true
-          example: Y1Ux1iNPvn6KYQK5Lj84WJ9VJrQw1L
-          schema:
-            type: string
-        - name: redirect_uri
-          description: Callback
-          in: header
-          required: true
-          example: 'https://127.0.0.1/callback'
-          schema:
-            type: string
-        - name: response_type
-          description: Response Type
-          in: header
-          required: true
-          example: code
+          example: >-
+            OAuth scope='Example'
+            client_id='uwCrAHAQbL7D9cvJLIztNaZ0bziEGMDh',
+            state='Y1Ux1iNPvn6KYQK5Lj84WJ9VJrQw1L',
+            redirect_uri='https://client.example.com/callback',
+            response_type='code'
           schema:
             type: string
       responses:
