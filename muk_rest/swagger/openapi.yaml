@@ -2881,7 +2881,7 @@ paths:
         - name: domain
           description: Domain
           in: query
-          example: " ['journal_id.type', 'in', ['cash', 'bank']]"
+          example: "['journal_id.type', 'in', ['cash', 'bank']]"
           required: true
           schema:
             type: string
@@ -2963,41 +2963,47 @@ paths:
       description: Search for matching records.
       parameters:
         - name: model
+          description: Model
           in: path
-          required: true
-          schema:
-            type: string
-        - name: orderby
-          in: path
+          example: account.move
           required: true
           schema:
             type: string
         - name: domain
-          description: TODO
+          description: Domain
           in: query
+          example: "['journal_id.type', 'in', ['cash', 'bank']]"
           required: true
           schema:
             type: string
         - name: fields
-          description: TODO
+          description: Fields
           in: query
+          example: "['journal_id', 'amount']"
           required: true
           schema:
             type: string
         - name: groupby
-          description: TODO
+          description: Groupby
           in: query
+          example: ['journal_id']
+          required: true
+          schema:
+            type: string
+        - name: orderby
+          description: OrderBy
+          in: path
           required: true
           schema:
             type: string
         - name: context
-          description: TODO
+          description: Context
           in: query
           required: false
           schema:
             type: string
         - name: offset
-          description: TODO
+          description: Offset
           in: query
           required: false
           schema:
@@ -3005,14 +3011,14 @@ paths:
             format: int32
             example: 0
         - name: limit
-          description: TODO
+          description: Limit
           in: query
           required: false
           schema:
             type: integer
             format: int32
         - name: lazy
-          description: TODO
+          description: Lazy
           in: query
           required: false
           schema:
@@ -3048,47 +3054,54 @@ paths:
       description: Search for matching records.
       parameters:
         - name: model
+          description: Model
           in: path
+          example: account.move
+          required: true
+          schema:
+            type: string
+        - name: domain
+          description: Domain
+          in: query
+          example: "['journal_id.type', 'in', ['cash', 'bank']]"
+          required: true
+          schema:
+            type: string
+        - name: fields
+          description: Fields
+          in: query
+          example: "['journal_id', 'amount']"
+          required: true
+          schema:
+            type: string
+        - name: groupby
+          description: Groupby
+          in: query
+          example: ['journal_id']
           required: true
           schema:
             type: string
         - name: limit
+          description: Limit
           in: path
           required: true
           schema:
             type: integer
             format: int32
         - name: orderby
+          description: OrderBy
           in: path
           required: true
           schema:
             type: string
-        - name: domain
-          description: TODO
-          in: query
-          required: true
-          schema:
-            type: string
-        - name: fields
-          description: TODO
-          in: query
-          required: true
-          schema:
-            type: string
-        - name: groupby
-          description: TODO
-          in: query
-          required: true
-          schema:
-            type: string
         - name: context
-          description: TODO
+          description: Context
           in: query
           required: false
           schema:
             type: string
         - name: offset
-          description: TODO
+          description: Offset
           in: query
           required: false
           schema:
@@ -3096,7 +3109,7 @@ paths:
             format: int32
             example: 0
         - name: lazy
-          description: TODO
+          description: Lazy
           in: query
           required: false
           schema:
@@ -3132,53 +3145,61 @@ paths:
       description: Search for matching records.
       parameters:
         - name: model
+          description: Model
           in: path
+          example: account.move
+          required: true
+          schema:
+            type: string
+        - name: domain
+          description: Domain
+          in: query
+          example: "['journal_id.type', 'in', ['cash', 'bank']]"
+          required: true
+          schema:
+            type: string
+        - name: fields
+          description: Fields
+          in: query
+          example: "['journal_id', 'amount']"
+          required: true
+          schema:
+            type: string
+        - name: groupby
+          description: Groupby
+          in: query
+          example: ['journal_id']
           required: true
           schema:
             type: string
         - name: limit
+          description: Limit
           in: path
           required: true
           schema:
             type: integer
             format: int32
         - name: offset
+          description: Offset
           in: path
           required: true
           schema:
             type: integer
             format: int32
         - name: orderby
+          description: OrderBy
           in: path
           required: true
           schema:
             type: string
-        - name: domain
-          description: TODO
-          in: query
-          required: true
-          schema:
-            type: string
-        - name: fields
-          description: TODO
-          in: query
-          required: true
-          schema:
-            type: string
-        - name: groupby
-          description: TODO
-          in: query
-          required: true
-          schema:
-            type: string
         - name: context
-          description: TODO
+          description: Context
           in: query
           required: false
           schema:
             type: string
         - name: lazy
-          description: TODO
+          description: Lazy
           in: query
           required: false
           schema:
