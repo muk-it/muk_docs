@@ -2666,35 +2666,37 @@ paths:
       description: Search for matching records.
       parameters:
         - name: model
+          description: Model
           in: path
           required: true
           schema:
             type: string
         - name: order
+          description: Order
           in: path
           required: true
           schema:
             type: string
         - name: domain
-          description: TODO
+          description: Domain
           in: query
           required: false
           schema:
             type: string
         - name: fields
-          description: TODO
+          description: Fields
           in: query
           required: false
           schema:
             type: string
         - name: context
-          description: TODO
+          description: Context
           in: query
           required: false
           schema:
             type: string
         - name: limit
-          description: TODO
+          description: Limit
           in: query
           required: false
           schema:
@@ -2702,7 +2704,7 @@ paths:
             format: int32
             example: 80
         - name: offset
-          description: TODO
+          description: Offset
           in: query
           required: false
           schema:
@@ -2729,44 +2731,47 @@ paths:
     get:
       tags:
         - Model
-      summary: Version
+      summary: Search
       description: Search for matching records.
       parameters:
         - name: model
+          description: Model
           in: path
           required: true
           schema:
             type: string
         - name: limit
+          description: Limit
           in: path
           required: true
           schema:
             type: string
         - name: order
+          description: Order
           in: path
           required: true
           schema:
             type: string
         - name: domain
-          description: TODO
+          description: Domain
           in: query
           required: false
           schema:
             type: string
         - name: fields
-          description: TODO
+          description: Fields
           in: query
           required: false
           schema:
             type: string
         - name: context
-          description: TODO
+          description: Context
           in: query
           required: false
           schema:
             type: string
         - name: offset
-          description: TODO
+          description: Offset
           in: query
           required: false
           schema:
@@ -2793,45 +2798,49 @@ paths:
     get:
       tags:
         - Model
-      summary: Version
+      summary: Search
       description: Search for matching records.
       parameters:
         - name: model
+          description: Model
           in: path
           required: true
           schema:
             type: string
         - name: limit
+          description: Limit
           in: path
           required: true
           schema:
             type: integer
             format: int32
         - name: offset
+          description: Offset
           in: path
           required: true
           schema:
             type: integer
             format: int32
         - name: order
+          description: Order
           in: path
           required: true
           schema:
             type: string
         - name: domain
-          description: TODO
+          description: Domain
           in: query
           required: false
           schema:
             type: string
         - name: fields
-          description: TODO
+          description: Fields
           in: query
           required: false
           schema:
             type: string
         - name: context
-          description: TODO
+          description: Context
           in: query
           required: false
           schema:
