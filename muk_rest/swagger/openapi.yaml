@@ -2505,20 +2505,20 @@ paths:
           schema:
             type: string
         - name: ids
-          description: TODO
+          description: IDs
           in: query
           required: true
           schema:
             type: string
         - name: context
-          description: TODO
+          description: Context
           in: query
           required: false
           schema:
             type: string
       responses:
         '200':
-          description: ''
+          description: List of ID and name tupels
           content:
             application/json:
               schema:
@@ -2575,6 +2575,10 @@ paths:
       responses:
         '200':
           description: TODO
+          content:
+            application/json:
+              schema:
+                example: [{id: 1, name: "YourCompany"}]
       security:
         - OAuth2:
             - all
