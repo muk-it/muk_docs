@@ -2105,6 +2105,12 @@ paths:
       responses:
         '200':
           description: List of field names
+        '400':
+          description: The server could not process the request, probably due to an incorrect request syntax.
+        '401':
+          description: The server could not verify that you are authorized to access the requested URL.
+        '500':
+          description: An error occurred while the request was being processed and therefore it could not be executed completely.
       security:
         - OAuth2:
             - all 
@@ -2113,7 +2119,7 @@ paths:
       tags:
         - Model
       summary: Fields
-      description: TODO
+      description: List of fields.
       parameters:
         - name: model
           description: Model
@@ -2137,6 +2143,12 @@ paths:
       responses:
         '200':
           description: Field information
+        '400':
+          description: The server could not process the request, probably due to an incorrect request syntax.
+        '401':
+          description: The server could not verify that you are authorized to access the requested URL.
+        '500':
+          description: An error occurred while the request was being processed and therefore it could not be executed completely.
       security:
         - OAuth2:
             - all 
@@ -2145,7 +2157,7 @@ paths:
       tags:
         - Model
       summary: Metadata
-      description: TODO
+      description: Meta information of a model.
       parameters:
         - name: model
           description: Model
@@ -2170,6 +2182,12 @@ paths:
       responses:
         '200':
           description: Meta information
+        '400':
+          description: The server could not process the request, probably due to an incorrect request syntax.
+        '401':
+          description: The server could not verify that you are authorized to access the requested URL.
+        '500':
+          description: An error occurred while the request was being processed and therefore it could not be executed completely.
       security:
         - OAuth2:
             - all 
