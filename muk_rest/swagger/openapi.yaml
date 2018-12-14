@@ -2543,28 +2543,31 @@ paths:
     get:
       tags:
         - Model
-      summary: Search
-      description: Search for matching records.
+      summary: Read
+      description: Read the given records.
       parameters:
         - name: model
           in: path
           required: true
+          example: res.partner
           schema:
             type: string
         - name: ids
-          description: TODO
+          description: IDs
+          example: "[1, 2]"
           in: query
           required: true
           schema:
             type: string
         - name: fields
-          description: TODO
+          description: Fields
+          example: "['name']"
           in: query
           required: false
           schema:
             type: string
         - name: context
-          description: TODO
+          description: Contex
           in: query
           required: false
           schema:
@@ -2583,30 +2586,32 @@ paths:
       description: Search for matching records.
       parameters:
         - name: model
-          in: path
+          description: Model
+          in: path          
+          example: res.partner
           required: true
           schema:
             type: string
         - name: domain
-          description: TODO
+          description: Domain
           in: query
           required: false
           schema:
             type: string
         - name: fields
-          description: TODO
+          description: Fields
           in: query
           required: false
           schema:
             type: string
         - name: context
-          description: TODO
+          description: Context
           in: query
           required: false
           schema:
             type: string
         - name: limit
-          description: TODO
+          description: Limit
           in: query
           required: false
           schema:
@@ -2614,7 +2619,7 @@ paths:
             format: int32
             example: 80
         - name: offset
-          description: TODO
+          description: Offset
           in: query
           required: false
           schema:
@@ -2622,7 +2627,7 @@ paths:
             format: int32
             example: 0
         - name: order
-          description: TODO
+          description: Order
           in: query
           required: false
           schema:
