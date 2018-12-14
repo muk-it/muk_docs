@@ -2494,8 +2494,8 @@ paths:
     get:
       tags:
         - Model
-      summary: Search
-      description: Search for matching records.
+      summary: Names
+      description: Get the record names.
       parameters:
         - name: model
           description: Model in the environment
@@ -2530,6 +2530,12 @@ paths:
                       - type: string
                       - type: integer
                 example: [[1, "YourCompany"], [2, "System"]]
+        '400':
+          description: The server could not process the request, probably due to an incorrect request syntax.
+        '401':
+          description: The server could not verify that you are authorized to access the requested URL.
+        '500':
+          description: An error occurred while the request was being processed and therefore it could not be executed completely.
       security:
         - OAuth2:
             - all
