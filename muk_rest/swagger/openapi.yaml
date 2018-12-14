@@ -964,14 +964,12 @@ paths:
           description: Model
           in: query
           required: false
-          example: ir.attachment
           schema:
             type: string
         - name: id
           description: ID
           in: query
           required: false
-          example: 1
           schema:
             type: integer
             format: int32
@@ -1014,14 +1012,12 @@ paths:
           description: Access Token
           in: query
           required: false
-          example: ASD21KSJADKAJI
           schema:
             type: string
         - name: related_id
           description: Related ID
           in: query
           required: false
-          example: 1
           schema:
             type: integer
             format: int32
@@ -1088,7 +1084,6 @@ paths:
           description: XML-ID
           in: query
           required: false
-          example: 383-d1f5999
           schema:
             type: string
         - name: model
@@ -1219,7 +1214,6 @@ paths:
           description: XML-ID
           in: query
           required: false
-          example: 383-d1f5999
           schema:
             type: string
         - name: model
@@ -1343,7 +1337,6 @@ paths:
           description: XML-ID
           in: query
           required: false
-          example: 383-d1f5999
           schema:
             type: string
         - name: model
@@ -1467,7 +1460,6 @@ paths:
           description: XML-ID
           in: query
           required: false
-          example: 383-d1f5999
           schema:
             type: string
         - name: model
@@ -1591,7 +1583,6 @@ paths:
           description: XML-ID
           in: query
           required: false
-          example: 383-d1f5999
           schema:
             type: string
         - name: model
@@ -1715,7 +1706,6 @@ paths:
           description: XML-ID
           in: query
           required: false
-          example: 383-d1f5999
           schema:
             type: string
         - name: model
