@@ -3270,7 +3270,7 @@ paths:
     put:
       tags:
         - Model
-      summary: Version
+      summary: Write
       description: Search for matching records.
       parameters:
         - name: model
@@ -3316,7 +3316,7 @@ paths:
     delete:
       tags:
         - Model
-      summary: Version
+      summary: Unlink
       description: Search for matching records.
       parameters:
         - name: model
