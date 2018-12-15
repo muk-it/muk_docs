@@ -3389,25 +3389,31 @@ paths:
       tags:
         - Security
       summary: Access Rights
-      description: TODO
+      description: Access Rights Model
       parameters:
         - name: model
-          description: TODO
+          description: Model
           in: path
           required: true
-          example: TODO
+          example: res.partner
           schema:
             type: string
         - name: operation
-          description: TODO
+          description: Operation
           in: path
           required: true
-          example: TODO
+          example: read
           schema:
             type: string
       responses:
         '200':
-          description: TODO
+          description: Result
+        '400':
+          description: The server could not process the request, probably due to an incorrect request syntax.
+        '401':
+          description: The server could not verify that you are authorized to access the requested URL.
+        '500':
+          description: An error occurred while the request was being processed and therefore it could not be executed completely.
       security:
         - OAuth2:
             - all
@@ -3416,23 +3422,23 @@ paths:
       tags:
         - Security
       summary: Access Rules
-      description: TODO
+      description: Access Rules Records
       parameters:
         - name: model
-          description: TODO
+          description: Model
           in: path
           required: true
-          example: TODO
+          example: res.partner
           schema:
             type: string
         - name: ids
-          description: TODO
+          description: IDs
           in: query
           required: false
           schema:
             type: string
         - name: operation
-          description: TODO
+          description: Operation
           in: query
           required: false
           schema:
@@ -3440,7 +3446,13 @@ paths:
             example: read
       responses:
         '200':
-          description: TODO
+          description: Result
+        '400':
+          description: The server could not process the request, probably due to an incorrect request syntax.
+        '401':
+          description: The server could not verify that you are authorized to access the requested URL.
+        '500':
+          description: An error occurred while the request was being processed and therefore it could not be executed completely.
       security:
         - OAuth2:
             - all
@@ -3473,7 +3485,13 @@ paths:
             type: string
       responses:
         '200':
-          description: TODO
+          description: Result
+        '400':
+          description: The server could not process the request, probably due to an incorrect request syntax.
+        '401':
+          description: The server could not verify that you are authorized to access the requested URL.
+        '500':
+          description: An error occurred while the request was being processed and therefore it could not be executed completely.
       security:
         - OAuth2:
             - all
@@ -3506,7 +3524,13 @@ paths:
             type: string
       responses:
         '200':
-          description: TODO
+          description: Result
+        '400':
+          description: The server could not process the request, probably due to an incorrect request syntax.
+        '401':
+          description: The server could not verify that you are authorized to access the requested URL.
+        '500':
+          description: An error occurred while the request was being processed and therefore it could not be executed completely.
       security:
         - OAuth2:
             - all
@@ -3539,7 +3563,13 @@ paths:
             type: string
       responses:
         '200':
-          description: TODO
+          description: Result
+        '400':
+          description: The server could not process the request, probably due to an incorrect request syntax.
+        '401':
+          description: The server could not verify that you are authorized to access the requested URL.
+        '500':
+          description: An error occurred while the request was being processed and therefore it could not be executed completely.
       security:
         - OAuth2:
             - all
@@ -3578,7 +3608,13 @@ paths:
             type: string
       responses:
         '200':
-          description: TODO
+          description: Result
+        '400':
+          description: The server could not process the request, probably due to an incorrect request syntax.
+        '401':
+          description: The server could not verify that you are authorized to access the requested URL.
+        '500':
+          description: An error occurred while the request was being processed and therefore it could not be executed completely.
       security:
         - OAuth2:
             - all
@@ -3617,7 +3653,13 @@ paths:
             type: string
       responses:
         '200':
-          description: TODO
+          description: Result
+        '400':
+          description: The server could not process the request, probably due to an incorrect request syntax.
+        '401':
+          description: The server could not verify that you are authorized to access the requested URL.
+        '500':
+          description: An error occurred while the request was being processed and therefore it could not be executed completely.
       security:
         - OAuth2:
             - all
