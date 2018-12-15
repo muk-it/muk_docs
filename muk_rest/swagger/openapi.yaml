@@ -3461,24 +3461,24 @@ paths:
       tags:
         - Security
       summary: Access Rules
-      description: TODO
+      description: Access Rules Records
       parameters:
         - name: model
-          description: TODO
+          description: Model
           in: path
           required: true
-          example: TODO
+          example: res.partner
           schema:
             type: string
         - name: operation
-          description: TODO
+          description: Operation
           in: path
           required: true
-          example: TODO
+          example: read
           schema:
             type: string
         - name: ids
-          description: TODO
+          description: IDs
           in: query
           required: false
           schema:
@@ -3500,24 +3500,24 @@ paths:
       tags:
         - Security
       summary: Access Fields
-      description: TODO
+      description: Access Fields Model
       parameters:
         - name: model
-          description: TODO
+          description: Model
           in: path
           required: true
-          example: TODO
+          example: res.partner
           schema:
             type: string
         - name: operation
-          description: TODO
+          description: Operation
           in: query
           required: false
           schema:
             type: string
             example: read
         - name: fields
-          description: TODO
+          description: Fields
           in: query
           required: false
           schema:
@@ -3539,24 +3539,24 @@ paths:
       tags:
         - Security
       summary: Access Fields
-      description: TODO
+      description: Access Fields Model
       parameters:
         - name: model
-          description: TODO
+          description: Model
           in: path
           required: true
-          example: TODO
+          example: res.partner
           schema:
             type: string
         - name: operation
-          description: TODO
+          description: Operation
           in: path
           required: true
-          example: TODO
+          example: read
           schema:
             type: string
         - name: fields
-          description: TODO
+          description: Fields
           in: query
           required: false
           schema:
@@ -3578,30 +3578,30 @@ paths:
       tags:
         - Security
       summary: General Access
-      description: TODO
+      description: General Access
       parameters:
         - name: model
-          description: TODO
+          description: Model
           in: path
           required: true
-          example: TODO
+          example: res.partner
           schema:
             type: string
         - name: ids
-          description: TODO
+          description: IDs
           in: query
           required: true
           schema:
             type: string
         - name: operation
-          description: TODO
+          description: Operation
           in: query
           required: false
           schema:
             type: string
             example: read
         - name: fields
-          description: TODO
+          description: Fields
           in: query
           required: false
           schema:
@@ -3623,30 +3623,30 @@ paths:
       tags:
         - Security
       summary: General Access
-      description: TODO
+      description: General Access
       parameters:
         - name: model
-          description: TODO
+          description: Model
           in: path
           required: true
-          example: TODO
+          example: res.partner
           schema:
             type: string
         - name: operation
-          description: TODO
+          description: Operation
           in: path
           required: true
-          example: TODO
+          example: read
           schema:
             type: string
         - name: ids
-          description: TODO
+          description: IDs
           in: query
           required: true
           schema:
             type: string
         - name: fields
-          description: TODO
+          description: Fields
           in: query
           required: false
           schema:
