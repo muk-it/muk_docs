@@ -2,7 +2,7 @@
 
 Here you can find some examples of how you can use the REST API.
 
-## Python
+## [Python](https://github.com/muk-it/muk_docs/blob/12%2C0/muk_rest/examples/example.py)
 
 ```python
 import json
@@ -29,4 +29,36 @@ token = oauth.fetch_token(
 )
 
 print(oauth.get("https://demo12.mukit.at/api/user").json())
+```
+
+## [PHP](https://github.com/muk-it/muk_docs/blob/12%2C0/muk_rest/examples/example.php)
+
+```php
+  $provider = new \League\OAuth2\Client\Provider\GenericProvider([
+    'clientId'                => 'LegacyApplicationFlowDemoClientKey',
+    'clientSecret'            => 'LegacyApplicationFlowDemoClientSecret',
+    'redirectUri'             => 'https://app.swaggerhub.com/oauth2_redirect/',
+    'urlAuthorize'            => 'https://demo12.mukit.at/api/authentication/oauth2/authorize',
+    'urlAccessToken'          => 'https://demo12.mukit.at/api/authentication/oauth2/token',
+    'urlResourceOwnerDetails' => ''
+  ]);
+  
+  try {
+    $accessToken = $provider->getAccessToken('password', [
+      'username' => 'demo',
+      'password' => 'demo'      
+    ]);
+    $request = $provider->getAuthenticatedRequest(
+      'GET',
+      'https://demo12.mukit.at/api/user',
+      $accessToken
+    );
+    $client = new \GuzzleHttp\Client();
+    $response = $client->send($request);
+    $rawBody = $response->getBody()->getContents();
+    
+    print_r($rawBody);
+  } catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
+    exit($e->getMessage());
+  }
 ```
