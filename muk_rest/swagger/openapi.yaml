@@ -3729,23 +3729,23 @@ paths:
       tags:
         - Database
       summary: Backup Database
-      description: TODO
+      description: Backup Database
       parameters:
         - name: database_name
-          description: TODO
+          description: Database Name
           in: query
           required: true
           schema:
             type: string
         - name: master_password
-          description: TODO
+          description: Master Password
           in: query
           required: false
           example: admin
           schema:
             type: string
         - name: backup_format
-          description: TODO
+          description: Format
           in: query
           required: false
           example: zip
@@ -3765,29 +3765,29 @@ paths:
       tags:
         - Database
       summary: Restore Database
-      description: TODO
+      description: Restore Database
       parameters:
         - name: backup_file
-          description: TODO
+          description: Filename
           in: query
           required: true
           schema:
             type: string
         - name: database_name
-          description: TODO
+          description: Database Name
           in: query
           required: true
           schema:
             type: string
         - name: master_password
-          description: TODO
+          description: Master Password
           in: query
           required: false
           example: admin
           schema:
             type: string
         - name: copy
-          description: TODO
+          description: Copy
           in: query
           required: false
           schema:
@@ -3806,35 +3806,35 @@ paths:
       tags:
         - Database
       summary: Create Database
-      description: TODO
+      description: Create Database
       parameters:
         - name: database_name
-          description: TODO
+          description: Database Name
           in: query
           required: true
           schema:
             type: string
         - name: admin_login
-          description: TODO
+          description: Admin Login
           in: query
           required: true
           schema:
             type: string
         - name: admin_password
-          description: TODO
+          description: Admin Password
           in: query
           required: true
           schema:
             type: string
         - name: master_password
-          description: TODO
+          description: Master Password
           in: query
           required: false
           example: admin
           schema:
             type: string
         - name: lang
-          description: TODO
+          description: Language
           in: query
           required: false
           example: en_US
@@ -3854,22 +3854,22 @@ paths:
       tags:
         - Database
       summary: Duplicate Database
-      description: TODO
+      description: Duplicate Database
       parameters:
         - name: database_old
-          description: TODO
+          description: Old Database
           in: query
           required: true
           schema:
             type: string
         - name: database_new
-          description: TODO
+          description: New Database
           in: query
           required: true
           schema:
             type: string
         - name: master_password
-          description: TODO
+          description: Master Password
           in: query
           required: false
           example: admin
@@ -3889,16 +3889,16 @@ paths:
       tags:
         - Database
       summary: Drop Database
-      description: TODO
+      description: Drop Database
       parameters:
         - name: database_name
-          description: TODO
+          description: Database Name
           in: query
           required: true
           schema:
             type: string
         - name: master_password
-          description: TODO
+          description: Master Password
           in: query
           required: false
           example: admin
