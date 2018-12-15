@@ -3668,16 +3668,16 @@ paths:
       tags:
         - Database
       summary: Master Password
-      description: TODO
+      description: Change Master Password
       parameters:
         - name: password_new
-          description: TODO
+          description: New Password
           in: query
           required: true
           schema:
             type: string
         - name: password_old
-          description: TODO
+          description: Old Password
           in: query
           required: false
           example: admin
@@ -3685,16 +3685,22 @@ paths:
             type: string
       responses:
         '200':
-          description: TODO
+          description: Result
+        '400':
+          description: The server could not process the request, probably due to an incorrect request syntax.
+        '401':
+          description: The server could not verify that you are authorized to access the requested URL.
+        '500':
+          description: An error occurred while the request was being processed and therefore it could not be executed completely.
   /api/database/list:
     get:
       tags:
         - Database
       summary: Database List
-      description: TODO
+      description: List Databases
       responses:
         '200':
-          description: TODO
+          description: List of Databases
           content:
             application/json:
               schema:
@@ -3712,6 +3718,12 @@ paths:
                     items:
                       type: string
                     example: []
+        '400':
+          description: The server could not process the request, probably due to an incorrect request syntax.
+        '401':
+          description: The server could not verify that you are authorized to access the requested URL.
+        '500':
+          description: An error occurred while the request was being processed and therefore it could not be executed completely.
   /api/database/backup:
     post:
       tags:
@@ -3741,7 +3753,13 @@ paths:
             type: string
       responses:
         '200':
-          description: TODO
+          description: Result
+        '400':
+          description: The server could not process the request, probably due to an incorrect request syntax.
+        '401':
+          description: The server could not verify that you are authorized to access the requested URL.
+        '500':
+          description: An error occurred while the request was being processed and therefore it could not be executed completely.
   /api/database/restore:
     post:
       tags:
@@ -3776,7 +3794,13 @@ paths:
             type: boolean
       responses:
         '200':
-          description: TODO
+          description: Result
+        '400':
+          description: The server could not process the request, probably due to an incorrect request syntax.
+        '401':
+          description: The server could not verify that you are authorized to access the requested URL.
+        '500':
+          description: An error occurred while the request was being processed and therefore it could not be executed completely.
   /api/database/create:
     post:
       tags:
@@ -3818,7 +3842,13 @@ paths:
             type: string
       responses:
         '200':
-          description: TODO
+          description: Result
+        '400':
+          description: The server could not process the request, probably due to an incorrect request syntax.
+        '401':
+          description: The server could not verify that you are authorized to access the requested URL.
+        '500':
+          description: An error occurred while the request was being processed and therefore it could not be executed completely.
   /api/database/duplicate:
     post:
       tags:
@@ -3847,7 +3877,13 @@ paths:
             type: string
       responses:
         '200':
-          description: TODO
+          description: Result
+        '400':
+          description: The server could not process the request, probably due to an incorrect request syntax.
+        '401':
+          description: The server could not verify that you are authorized to access the requested URL.
+        '500':
+          description: An error occurred while the request was being processed and therefore it could not be executed completely.
   /api/database/drop:
     post:
       tags:
@@ -3870,4 +3906,10 @@ paths:
             type: string
       responses:
         '200':
-          description: TODO
+          description: Result
+        '400':
+          description: The server could not process the request, probably due to an incorrect request syntax.
+        '401':
+          description: The server could not verify that you are authorized to access the requested URL.
+        '500':
+          description: An error occurred while the request was being processed and therefore it could not be executed completely.
