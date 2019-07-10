@@ -20,6 +20,8 @@ Parameter: `?db=database`
 
 As long as the same session is used, the correct database is automatically selected.
 
+So before the OAuth authorization check for the database by sending `/api/database?db=mydatabasename`to the server.
+
 ## Why do I get the an error with the code: insecure_transport_protocol?
 
 By default, the API does not allow access over an insecure connection.
