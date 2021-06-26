@@ -7,7 +7,8 @@ interact with the server are provided.
 ### Documentation
 
 * [Clients]
-* [Examples] 
+* [Examples]
+* [Showcase]
 * [Documentation] 
 * [Framework]
 
@@ -91,6 +92,7 @@ HTTP requests. Take a look at the [clients] and [examples] or open the
 
 [Clients]: ./clients/clients.md
 [Examples]: ./examples/examples.md
+[Showcase]: ./showcase/showcase.md
 [Documentation]: https://app.swaggerhub.com/apis/keshrath/muk_rest/3.0.0
 [Framework]: ./framework/framework.md
 [Download]: https://apps.odoo.com/apps/modules/12.0/muk_rest/
